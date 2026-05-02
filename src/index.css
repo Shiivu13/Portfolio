@@ -1,0 +1,127 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 240 33% 11%;
+    --foreground: 30 20% 96%;
+    --card: 240 33% 18%;
+    --card-foreground: 30 20% 96%;
+    --popover: 240 33% 18%;
+    --popover-foreground: 30 20% 96%;
+    --primary: 350 70% 74%;
+    --primary-foreground: 240 33% 11%;
+    --secondary: 200 60% 70%;
+    --secondary-foreground: 240 33% 11%;
+    --muted: 240 20% 25%;
+    --muted-foreground: 25 10% 63%;
+    --accent: 350 70% 74%;
+    --accent-foreground: 240 33% 11%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 240 20% 25%;
+    --input: 240 20% 25%;
+    --ring: 350 70% 74%;
+    --radius: 0.625rem;
+  }
+
+  html {
+    scroll-behavior: auto;
+  }
+
+  body {
+    @apply bg-deep-bg text-soft-white;
+    font-family: 'Inter', sans-serif;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  ::selection {
+    background: rgba(244, 168, 180, 0.3);
+    color: #F8F5F2;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Playfair Display', serif;
+  }
+}
+
+@layer components {
+  .text-gradient {
+    background: linear-gradient(135deg, #F4A8B4 0%, #7EC8E3 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .btn-gradient {
+    background: linear-gradient(135deg, #F4A8B4 0%, #E897A8 50%, #7EC8E3 100%);
+  }
+
+  .card-overlay-gradient {
+    background: linear-gradient(180deg, rgba(26,26,62,0) 0%, rgba(26,26,62,0.75) 100%);
+  }
+
+  .bar-gradient {
+    background: linear-gradient(90deg, #F4A8B4, #7EC8E3);
+  }
+
+  .noise-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0.03;
+    mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 128 128' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  }
+
+  .perspective-container {
+    perspective: 1000px;
+    perspective-origin: 50% 50%;
+  }
+
+  .preserve-3d {
+    transform-style: preserve-3d;
+  }
+
+  .section-label {
+    @apply font-ui text-xs uppercase tracking-[0.15em] text-warm-gray;
+  }
+
+  .link-underline {
+    position: relative;
+  }
+
+  .link-underline::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background: currentColor;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s ease;
+  }
+
+  .link-underline:hover::after {
+    transform: scaleX(1);
+  }
+}
+
+@layer utilities {
+  .will-change-transform {
+    will-change: transform;
+  }
+
+  .backface-hidden {
+    backface-visibility: hidden;
+  }
+}
