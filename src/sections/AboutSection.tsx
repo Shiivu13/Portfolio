@@ -129,7 +129,7 @@ export default function AboutSection() {
                 Hi, I'm Shivansh, a software engineer who loves bridging the gap between cutting-edge AI and everyday applications. For me, it's not just about writing code; it's about building intelligent, production-ready systems that solve real-world problems.
               </p>
               <p ref={para2Ref} className="font-body text-lg text-white/90 leading-relaxed">
-                My journey started with a simple curiosity about how machines perceive the world. Today, that curiosity fuels my work—whether I'm developing YOLO-powered surveillance pipelines, creating smart GenAI assistants, or architecting robust FastAPI backends on AWS.
+                My journey started with a simple curiosity about how machines perceive the world. Today, that curiosity fuels my work, whether I'm developing YOLO-powered surveillance pipelines, creating smart GenAI assistants, or architecting robust FastAPI backends on AWS.
               </p>
               <p ref={para3Ref} className="font-body text-lg text-white/90 leading-relaxed">
                 I believe the best technology is powerful yet invisible. When I'm not fine-tuning models or optimizing Docker containers, you'll probably find me exploring the latest LLM frameworks and brainstorming my next big project.
