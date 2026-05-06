@@ -9,6 +9,14 @@ export interface Project {
 
 export const projects: Project[] = [
   {
+    id: 7,
+    title: "Rufus-Twin: AI Shopping Assistant",
+    tags: ["React", "FastAPI", "Gemini AI", "Supabase"],
+    description: "A smart AI shopping assistant that uses Gemini AI and Tavily Search for real-time web research and product comparisons. Features a sleek React + Vite glassmorphic frontend and a FastAPI + Supabase backend.",
+    githubUrl: "https://github.com/Shiivu13/Rufus-Twin",
+    image: "/bg-projects.jpg",
+  },
+  {
     id: 1,
     title: "AI-Powered Smart Surveillance",
     tags: ["Python", "YOLOv8", "FastAPI", "AWS"],
