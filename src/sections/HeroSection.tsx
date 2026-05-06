@@ -122,7 +122,7 @@ export default function HeroSection() {
             ref={line1Ref}
             className="font-display font-bold uppercase tracking-[0.05em] text-soft-white will-change-transform"
             style={{
-              fontSize: 'clamp(3.5rem, 8vw, 6.5rem)',
+              fontSize: 'clamp(2rem, 10vw, 6.5rem)',
               textShadow: '0 4px 30px rgba(0,0,0,0.4)',
               lineHeight: 1.1,
             }}
@@ -133,7 +133,7 @@ export default function HeroSection() {
             ref={line2Ref}
             className="font-display font-bold uppercase tracking-[0.05em] text-soft-white will-change-transform"
             style={{
-              fontSize: 'clamp(3.5rem, 8vw, 6.5rem)',
+              fontSize: 'clamp(2rem, 10vw, 6.5rem)',
               textShadow: '0 4px 30px rgba(0,0,0,0.4)',
               lineHeight: 1.1,
             }}

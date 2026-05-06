@@ -93,7 +93,7 @@ export default function ContactSection() {
           ref={headlineRef}
           className="font-display font-bold uppercase tracking-[0.05em] text-soft-white mb-6 will-change-transform"
           style={{
-            fontSize: 'clamp(2rem, 6vw, 4rem)',
+            fontSize: 'clamp(1.5rem, 8vw, 4rem)',
             lineHeight: 1.2,
             textShadow: '0 4px 30px rgba(0,0,0,0.4)',
           }}
