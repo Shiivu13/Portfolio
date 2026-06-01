@@ -10,6 +10,8 @@ import {
   FileSearch,
   Film,
   NotebookPen,
+  Network,
+  MessagesSquare,
   type LucideIcon,
 } from 'lucide-react';
 import { projects } from '../data/projects';
@@ -24,6 +26,8 @@ const ICONS: Record<string, LucideIcon> = {
   search: FileSearch,
   film: Film,
   notebook: NotebookPen,
+  agents: Network,
+  qa: MessagesSquare,
 };
 
 /** Corner HUD bracket. */
