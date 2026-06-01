@@ -124,4 +124,19 @@
   .backface-hidden {
     backface-visibility: hidden;
   }
+
+  /* Japanese glyphs for the anime "episode" intertitles / HUD kanji */
+  .font-jp {
+    font-family: 'Noto Sans JP', 'Playfair Display', serif;
+  }
+
+  /* Broadcast / title-card numerals */
+  .font-broadcast {
+    font-family: 'Bebas Neue', 'Inter', sans-serif;
+    letter-spacing: 0.04em;
+  }
+
+  .tabular-nums {
+    font-variant-numeric: tabular-nums;
+  }
 }

@@ -55,12 +55,12 @@ export default function SceneBackground({ src, triggerId, zIndex }: SceneBackgro
         src={src}
         alt=""
         className="w-full h-full object-cover scale-110"
-        style={{ filter: 'brightness(0.75) contrast(1.1)' }}
+        style={{ filter: 'brightness(0.6) contrast(1.18) saturate(1.08)' }}
         loading="eager"
       />
       <div
         className="absolute inset-0"
-        style={{ background: 'radial-gradient(ellipse at center, transparent 0%, rgba(26,26,62,0.4) 100%)' }}
+        style={{ background: 'radial-gradient(ellipse at center, transparent 0%, rgba(20,18,42,0.6) 100%)' }}
       />
     </div>
   );

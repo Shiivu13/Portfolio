@@ -11,7 +11,7 @@ export default function HeroSection() {
   const line1Ref = useRef<HTMLDivElement>(null);
   const line2Ref = useRef<HTMLDivElement>(null);
   const subRef = useRef<HTMLDivElement>(null);
-  const ctaRef = useRef<HTMLAnchorElement>(null);
+  const ctaRef = useRef<HTMLDivElement>(null);
   const scrollIndicatorRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -149,14 +149,33 @@ export default function HeroSection() {
           Real-time vision systems · Fraud detection · GenAI evaluation platforms
         </p>
 
-        <a
-          ref={ctaRef}
-          href="#projects"
-          onClick={handleCtaClick}
-          className="inline-block btn-gradient text-deep-bg font-ui font-semibold text-sm uppercase tracking-[0.12em] px-8 py-4 rounded-full shadow-glow hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300"
-        >
-          VIEW PROJECTS
-        </a>
+        <div ref={ctaRef} className="flex flex-wrap items-center gap-4">
+          <a
+            href="#projects"
+            onClick={handleCtaClick}
+            className="group/cta relative inline-flex items-center gap-3 overflow-hidden rounded-full px-8 py-4 font-ui font-semibold text-sm uppercase tracking-[0.14em] text-deep-bg shadow-glow transition-transform duration-300 hover:-translate-y-0.5"
+          >
+            <span className="absolute inset-0 btn-gradient" />
+            <span
+              className="absolute inset-0 translate-x-[-120%] group-hover/cta:translate-x-[120%] transition-transform duration-700 ease-out"
+              style={{ background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.55), transparent)' }}
+            />
+            <span className="relative z-10">VIEW PROJECTS</span>
+            <ChevronDown size={16} className="relative z-10 -rotate-90" />
+          </a>
+
+          <a
+            href="#contact"
+            onClick={(e) => {
+              e.preventDefault();
+              document.querySelector('#contact')?.scrollIntoView({ behavior: 'smooth' });
+            }}
+            className="group/ghost relative inline-flex items-center gap-2 rounded-full border border-white/25 px-7 py-4 font-ui font-semibold text-sm uppercase tracking-[0.14em] text-soft-white/90 transition-all duration-300 hover:border-cyan hover:text-cyan"
+          >
+            <span className="w-1.5 h-1.5 rounded-full bg-cyan animate-pulse" />
+            GET IN TOUCH
+          </a>
+        </div>
       </div>
 
       {/* Scroll Indicator */}
