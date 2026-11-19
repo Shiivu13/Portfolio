@@ -4,7 +4,6 @@ export interface Project {
   tags: string[];
   description: string;
   githubUrl: string;
-  image: string;
   /** Accent colour for the holographic case-file card. */
   accent: string;
   /** Japanese motif shown as a watermark on the card. */
@@ -24,7 +23,6 @@ export const projects: Project[] = [
     tags: ["FastAPI", "Multi-Agent", "pgvector", "Docker"],
     description: "Production-grade async backend that orchestrates specialized LLM sub-agents to solve complex queries through dynamic routing, shared context, and self-improving evaluation loops. Built on FastAPI, PostgreSQL + pgvector, and Docker with real-time SSE streaming.",
     githubUrl: "https://github.com/Shiivu13/Multi-AgentLLM",
-    image: "/bg-projects.jpg",
     accent: "#C8A8F4",
     kanji: "連携",
     category: "LLM ORCHESTRATION",
@@ -37,7 +35,6 @@ export const projects: Project[] = [
     tags: ["React", "FastAPI", "Gemini AI", "Supabase"],
     description: "A smart AI shopping assistant that uses Gemini AI and Tavily Search for real-time web research and product comparisons. Features a sleek React + Vite glassmorphic frontend and a FastAPI + Supabase backend.",
     githubUrl: "https://github.com/Shiivu13/Rufus-Twin",
-    image: "/bg-projects.jpg",
     accent: "#7EC8E3",
     kanji: "助手",
     category: "AI ASSISTANT",
@@ -50,7 +47,6 @@ export const projects: Project[] = [
     tags: ["RAG", "Gemini AI", "Whisper", "FAISS"],
     description: "Full-stack RAG platform to chat with your PDFs, audio, and video. Generates executive summaries and timestamped transcripts via Whisper, grounds Gemini answers in local FAISS embeddings, and ships a polished React UI backed by PostgreSQL and Docker.",
     githubUrl: "https://github.com/Shiivu13/Ai_QnA",
-    image: "/bg-projects.jpg",
     accent: "#86E3CE",
     kanji: "質問",
     category: "RAG / GENAI",
@@ -63,7 +59,6 @@ export const projects: Project[] = [
     tags: ["Python", "YOLOv8", "FastAPI", "AWS"],
     description: "Real-time surveillance system with YOLOv8 human detection, face recognition, behavioral analysis, and AWS cloud deployment. Features live analytics dashboard and event-driven FastAPI backend.",
     githubUrl: "https://github.com/Shiivu13/AI-Powered-Smart-Surveillance-System",
-    image: "/bg-projects.jpg",
     accent: "#FF8DA1",
     kanji: "監視",
     category: "COMPUTER VISION",
@@ -76,7 +71,6 @@ export const projects: Project[] = [
     tags: ["Python", "Streamlit", "GenAI", "Gemini"],
     description: "A framework to evaluate and compare Generative AI models using rule-based + LLM-as-a-judge scoring for clarity, risk, consistency, and RAG metrics. Built with Streamlit dashboard.",
     githubUrl: "https://github.com/Shiivu13/AI_evaluation_platform",
-    image: "/bg-projects.jpg",
     accent: "#9D8DF1",
     kanji: "評価",
     category: "GENERATIVE AI",
@@ -89,7 +83,6 @@ export const projects: Project[] = [
     tags: ["Python", "LightGBM", "SHAP", "Docker"],
     description: "End-to-end fraud detection with imbalanced data handling, PR-AUC optimization, SHAP explainability, and Dockerized FastAPI deployment. Live demo available on Streamlit.",
     githubUrl: "https://github.com/Shiivu13/end-to-end-Fraud-Detection-System-with-explanibility-",
-    image: "/bg-projects.jpg",
     accent: "#F4C77E",
     kanji: "検出",
     category: "ML / SECURITY",
@@ -102,7 +95,6 @@ export const projects: Project[] = [
     tags: ["Python", "Scikit-learn", "TF-IDF", "Streamlit"],
     description: "Content-based movie recommender using TF-IDF vectorization and cosine similarity. Features an interactive Streamlit frontend deployed to Streamlit Cloud.",
     githubUrl: "https://github.com/Shiivu13/Project-1-Recommender",
-    image: "/bg-projects.jpg",
     accent: "#6FD3E3",
     kanji: "推薦",
     category: "MACHINE LEARNING",

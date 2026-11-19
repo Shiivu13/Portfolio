@@ -1,321 +1,282 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState, type PointerEvent as RPointerEvent } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import {
-  ArrowUpRight,
-  Bot,
-  ScanFace,
-  Gauge,
-  ShieldAlert,
-  FileSearch,
-  Film,
-  NotebookPen,
-  Network,
-  MessagesSquare,
-  type LucideIcon,
-} from 'lucide-react';
-import { projects } from '../data/projects';
+import { ArrowUpRight, Github } from 'lucide-react';
+import { projects, type Project } from '../data/projects';
 
 gsap.registerPlugin(ScrollTrigger);
 
-const ICONS: Record<string, LucideIcon> = {
-  bot: Bot,
-  scan: ScanFace,
-  gauge: Gauge,
-  shield: ShieldAlert,
-  search: FileSearch,
-  film: Film,
-  notebook: NotebookPen,
-  agents: Network,
-  qa: MessagesSquare,
-};
+const BURSTS = ['POW!', 'BAM!', 'ZAP!', 'BOOM!', 'WHAM!', 'KRAK!', 'THWIP!'];
 
-/** Corner HUD bracket. */
-function Bracket({ pos, color }: { pos: string; color: string }) {
-  const base = 'absolute w-5 h-5 border-current pointer-events-none transition-all duration-500';
-  const map: Record<string, string> = {
-    tl: 'top-3 left-3 border-t-2 border-l-2',
-    tr: 'top-3 right-3 border-t-2 border-r-2',
-    bl: 'bottom-3 left-3 border-b-2 border-l-2',
-    br: 'bottom-3 right-3 border-b-2 border-r-2',
+function ProjectCard({ project, index }: { project: Project; index: number }) {
+  const cardRef = useRef<HTMLElement>(null);
+  const [hover, setHover] = useState(false);
+
+  const onMove = (e: RPointerEvent<HTMLElement>) => {
+    const el = cardRef.current;
+    if (!el || e.pointerType !== 'mouse') return;
+    const r = el.getBoundingClientRect();
+    const px = (e.clientX - r.left) / r.width - 0.5;
+    const py = (e.clientY - r.top) / r.height - 0.5;
+    gsap.to(el, {
+      rotateY: px * 14,
+      rotateX: -py * 14,
+      duration: 0.5,
+      ease: 'power3.out',
+      transformPerspective: 900,
+    });
+    el.style.setProperty('--mx', `${(px + 0.5) * 100}%`);
+    el.style.setProperty('--my', `${(py + 0.5) * 100}%`);
   };
-  return <span className={`${base} ${map[pos]}`} style={{ color }} />;
-}
 
-function ProjectCard({ project, index }: { project: typeof projects[0]; index: number }) {
-  const cardRef = useRef<HTMLDivElement>(null);
-  const tiltRef = useRef<HTMLDivElement>(null);
-  const glareRef = useRef<HTMLDivElement>(null);
-  const fileNo = String(index + 1).padStart(2, '0');
-  const Icon = ICONS[project.icon] ?? Bot;
-
-  useEffect(() => {
-    const card = cardRef.current;
-    const tilt = tiltRef.current;
-    if (!card || !tilt) return;
-
-    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-    const ctx = gsap.context(() => {
-      // Entrance: rise + slight 3D, stays readable (no fade-out on scroll-through).
-      gsap.from(card, {
-        y: 80,
-        z: -160,
-        rotateX: 12,
-        opacity: 0,
-        duration: 1,
-        ease: 'power3.out',
-        scrollTrigger: {
-          trigger: card,
-          start: 'top 88%',
-          toggleActions: 'play none none reverse',
-        },
-      });
-
-      // Continuous gentle float driven by scroll position for depth parallax.
-      gsap.to(card, {
-        y: -30,
-        ease: 'none',
-        scrollTrigger: {
-          trigger: card,
-          start: 'top bottom',
-          end: 'bottom top',
-          scrub: 1.2,
-        },
-      });
-    }, card);
-
-    // Pointer-driven 3D tilt + glare (skipped when reduced motion).
-    if (!reduce) {
-      const rotX = gsap.quickTo(tilt, 'rotationX', { duration: 0.5, ease: 'power2.out' });
-      const rotY = gsap.quickTo(tilt, 'rotationY', { duration: 0.5, ease: 'power2.out' });
-      const onMove = (e: PointerEvent) => {
-        const r = tilt.getBoundingClientRect();
-        const px = (e.clientX - r.left) / r.width;
-        const py = (e.clientY - r.top) / r.height;
-        rotY((px - 0.5) * 14);
-        rotX(-(py - 0.5) * 12);
-        if (glareRef.current) {
-          glareRef.current.style.background = `radial-gradient(420px circle at ${px * 100}% ${py * 100}%, ${project.accent}33, transparent 60%)`;
-        }
-      };
-      const onLeave = () => {
-        rotX(0);
-        rotY(0);
-        if (glareRef.current) glareRef.current.style.background = 'transparent';
-      };
-      tilt.addEventListener('pointermove', onMove);
-      tilt.addEventListener('pointerleave', onLeave);
-      return () => {
-        tilt.removeEventListener('pointermove', onMove);
-        tilt.removeEventListener('pointerleave', onLeave);
-        ctx.revert();
-      };
+  const onLeave = () => {
+    setHover(false);
+    if (cardRef.current) {
+      gsap.to(cardRef.current, { rotateX: 0, rotateY: 0, duration: 0.8, ease: 'elastic.out(1, 0.45)' });
     }
+  };
 
-    return () => ctx.revert();
-  }, [index, project.accent]);
+  const num = String(index + 1).padStart(2, '0');
 
   return (
-    <div ref={cardRef} className="preserve-3d will-change-transform" style={{ marginBottom: '9vh' }}>
+    <article
+      ref={cardRef}
+      onPointerMove={onMove}
+      onPointerEnter={() => setHover(true)}
+      onPointerLeave={onLeave}
+      className="p-card panel group flex h-full w-full flex-col p-6 hover:shadow-[16px_16px_0_#E10600] md:p-8"
+      data-cursor=""
+      style={{ transformStyle: 'preserve-3d' }}
+    >
+      {/* Spotlight following the pointer */}
       <div
-        ref={tiltRef}
-        className="group relative preserve-3d will-change-transform rounded-2xl"
-        style={{ transformStyle: 'preserve-3d' }}
+        className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+        style={{
+          background: 'radial-gradient(420px circle at var(--mx,50%) var(--my,50%), rgba(225,6,0,0.22), transparent 60%)',
+        }}
+      />
+
+      {/* Burst */}
+      <div
+        className="burst pointer-events-none absolute -right-8 -top-10 z-20 grid h-28 w-28 place-items-center bg-pow md:h-32 md:w-32"
+        style={{
+          transform: hover ? 'scale(1) rotate(-12deg)' : 'scale(0) rotate(-90deg)',
+          transition: 'transform .45s cubic-bezier(.3,1.8,.4,1)',
+        }}
       >
-        {/* glow aura */}
-        <div
-          className="absolute -inset-[1px] rounded-2xl opacity-50 group-hover:opacity-100 blur-[2px] transition-opacity duration-500"
-          style={{ background: `linear-gradient(135deg, ${project.accent}, transparent 55%, ${project.accent}55)` }}
-        />
-
-        <div
-          className="relative rounded-2xl overflow-hidden border border-white/10 group-hover:border-white/20 transition-all duration-500"
-          style={{
-            background: 'linear-gradient(160deg, rgba(28,26,58,0.92), rgba(16,15,36,0.96))',
-            backdropFilter: 'blur(16px)',
-            boxShadow: '0 30px 80px rgba(0,0,0,0.45)',
-          }}
-        >
-          {/* glare follows cursor */}
-          <div ref={glareRef} className="absolute inset-0 pointer-events-none z-20 transition-[background] duration-300" />
-
-          {/* corner brackets */}
-          <Bracket pos="tl" color={project.accent} />
-          <Bracket pos="tr" color={project.accent} />
-          <Bracket pos="bl" color={project.accent} />
-          <Bracket pos="br" color={project.accent} />
-
-          <div className="grid grid-cols-1 md:grid-cols-12">
-            {/* ---- Holographic poster panel (replaces the stock image) ---- */}
-            <div
-              className="md:col-span-5 relative overflow-hidden min-h-[210px] md:min-h-[300px]"
-              style={{ background: `radial-gradient(120% 120% at 80% 0%, ${project.accent}2e, transparent 55%), linear-gradient(150deg, ${project.accent}1f, rgba(10,10,26,0.9))` }}
-            >
-              {/* faint real-image texture so it reads as art, not a photo */}
-              <img
-                src={project.image}
-                alt=""
-                aria-hidden
-                className="absolute inset-0 w-full h-full object-cover opacity-[0.13] mix-blend-luminosity"
-              />
-              {/* tech grid */}
-              <div
-                className="absolute inset-0 opacity-30"
-                style={{
-                  backgroundImage:
-                    'linear-gradient(rgba(255,255,255,0.08) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.08) 1px, transparent 1px)',
-                  backgroundSize: '32px 32px',
-                }}
-              />
-              {/* giant ghosted file number */}
-              <div
-                className="absolute -bottom-6 -left-2 font-broadcast leading-none select-none"
-                style={{ fontSize: 'clamp(7rem, 16vw, 12rem)', color: `${project.accent}1f` }}
-              >
-                {fileNo}
-              </div>
-              {/* kanji watermark */}
-              <div
-                className="absolute top-4 right-4 font-jp leading-none select-none"
-                style={{ fontSize: 'clamp(2.4rem, 6vw, 4rem)', color: `${project.accent}40` }}
-              >
-                {project.kanji}
-              </div>
-              {/* central glowing icon medallion */}
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div
-                  className="relative flex items-center justify-center w-20 h-20 rounded-2xl border transition-transform duration-500 group-hover:scale-110"
-                  style={{
-                    borderColor: `${project.accent}66`,
-                    background: `radial-gradient(circle, ${project.accent}26, transparent 70%)`,
-                    boxShadow: `0 0 40px ${project.accent}40`,
-                  }}
-                >
-                  <Icon size={34} style={{ color: project.accent }} />
-                </div>
-              </div>
-              {/* scanline sweep on hover */}
-              <div className="absolute inset-0 overflow-hidden pointer-events-none">
-                <div
-                  className="absolute left-0 w-full h-24 -translate-y-full group-hover:translate-y-[420%] transition-transform duration-[1400ms] ease-in-out"
-                  style={{ background: `linear-gradient(180deg, transparent, ${project.accent}38, transparent)` }}
-                />
-              </div>
-            </div>
-
-            {/* ---- Content ---- */}
-            <div className="md:col-span-7 p-6 lg:p-8 flex flex-col justify-center relative">
-              {/* HUD header line */}
-              <div className="flex items-center gap-3 mb-4 font-ui text-[0.6rem] tracking-[0.25em] text-white/45">
-                <span style={{ color: project.accent }}>FILE {fileNo}</span>
-                <span className="w-px h-3 bg-white/20" />
-                <span>{project.category}</span>
-                <span className="w-px h-3 bg-white/20" />
-                <span>{project.year}</span>
-                <span className="ml-auto flex items-center gap-1.5">
-                  <span className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ background: project.accent }} />
-                  <span className="text-white/40">ONLINE</span>
-                </span>
-              </div>
-
-              <h3 className="font-heading font-medium text-soft-white text-xl lg:text-2xl mb-3 leading-snug">
-                {project.title}
-              </h3>
-
-              <p className="font-body text-white/75 text-[0.95rem] leading-relaxed mb-6">
-                {project.description}
-              </p>
-
-              {/* system tags */}
-              <div className="flex flex-wrap gap-2 mb-7">
-                {project.tags.map((tag) => (
-                  <span
-                    key={tag}
-                    className="font-ui text-[0.62rem] font-semibold tracking-wider px-2.5 py-1 rounded-md border"
-                    style={{
-                      borderColor: `${project.accent}33`,
-                      background: `${project.accent}12`,
-                      color: '#E9E4F5',
-                    }}
-                  >
-                    <span style={{ color: project.accent }}>/</span> {tag}
-                  </span>
-                ))}
-              </div>
-
-              {/* premium button */}
-              <a
-                href={project.githubUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group/btn relative inline-flex items-center gap-2.5 w-fit overflow-hidden rounded-full px-6 py-3 font-ui text-xs font-semibold uppercase tracking-[0.15em] transition-colors duration-300 border"
-                style={{ borderColor: `${project.accent}66`, color: project.accent }}
-              >
-                {/* fill */}
-                <span
-                  className="absolute inset-0 -z-0 origin-left scale-x-0 group-hover/btn:scale-x-100 transition-transform duration-500 ease-out"
-                  style={{ background: `linear-gradient(90deg, ${project.accent}, #7EC8E3)` }}
-                />
-                <span className="relative z-10 transition-colors duration-300 group-hover/btn:text-deep-bg">
-                  ACCESS REPOSITORY
-                </span>
-                <ArrowUpRight
-                  size={16}
-                  className="relative z-10 transition-all duration-300 group-hover/btn:text-deep-bg group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5"
-                />
-              </a>
-            </div>
-          </div>
-        </div>
+        <span className="font-comic text-2xl text-blood md:text-3xl" style={{ WebkitTextStroke: '1px #0B0B0C' }}>
+          {BURSTS[index % BURSTS.length]}
+        </span>
       </div>
-    </div>
+
+      <header className="relative flex items-start justify-between gap-4" style={{ transform: 'translateZ(30px)' }}>
+        <div className="font-display text-6xl leading-none text-outline-red md:text-7xl">#{num}</div>
+        <div className="text-right font-mono text-[10px] uppercase leading-relaxed tracking-[0.2em] text-paper/60">
+          <div>{project.category}</div>
+          <div className="text-blood">{project.year}</div>
+        </div>
+      </header>
+
+      <h3
+        className="relative mt-6 font-display text-3xl uppercase leading-[0.95] text-paper md:text-4xl"
+        style={{ transform: 'translateZ(50px)' }}
+      >
+        {project.title}
+      </h3>
+
+      <p className="relative mt-4 flex-1 font-body text-sm leading-relaxed text-paper/70 md:text-base" style={{ transform: 'translateZ(20px)' }}>
+        {project.description}
+      </p>
+
+      <ul className="relative mt-6 flex flex-wrap gap-2" style={{ transform: 'translateZ(25px)' }}>
+        {project.tags.map((t, i) => (
+          <li
+            key={t}
+            className="border-2 border-paper/80 px-2.5 py-1 font-mono text-[10px] uppercase tracking-[0.15em] text-paper transition-colors duration-200 group-hover:border-blood"
+            style={{ transform: `rotate(${(i % 2 ? 1 : -1) * 1.5}deg)` }}
+          >
+            {t}
+          </li>
+        ))}
+      </ul>
+
+      <a
+        href={project.githubUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        data-cursor="CODE"
+        className="relative mt-8 inline-flex items-center justify-between border-t-2 border-paper/15 pt-5 font-display text-lg uppercase tracking-wide text-paper"
+        style={{ transform: 'translateZ(35px)' }}
+      >
+        <span className="flex items-center gap-2">
+          <Github size={18} />
+          <span className="slash-link relative z-0">View the code</span>
+        </span>
+        <span className="grid h-11 w-11 place-items-center rounded-full border-2 border-paper transition-all duration-300 group-hover:rotate-45 group-hover:border-blood group-hover:bg-blood">
+          <ArrowUpRight size={20} />
+        </span>
+      </a>
+    </article>
   );
 }
 
 export default function ProjectsSection() {
-  const sectionRef = useRef<HTMLDivElement>(null);
-  const headerRef = useRef<HTMLDivElement>(null);
+  const sectionRef = useRef<HTMLElement>(null);
+  const trackRef = useRef<HTMLDivElement>(null);
+  const counterRef = useRef<HTMLSpanElement>(null);
+  const barRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const ctx = gsap.context(() => {
-      gsap.from(headerRef.current, {
-        y: 50,
-        opacity: 0,
-        duration: 1,
-        ease: 'power2.out',
+    const mm = gsap.matchMedia();
+
+    // Desktop: pin the section and drive the comic strip sideways.
+    mm.add('(min-width: 1024px) and (prefers-reduced-motion: no-preference)', () => {
+      const track = trackRef.current!;
+      const distance = () => track.scrollWidth - window.innerWidth;
+
+      const tween = gsap.to(track, {
+        x: () => -distance(),
+        ease: 'none',
         scrollTrigger: {
           trigger: sectionRef.current,
-          start: 'top 70%',
-          toggleActions: 'play none none reverse',
+          start: 'top top',
+          end: () => `+=${distance()}`,
+          pin: true,
+          scrub: 0.8,
+          invalidateOnRefresh: true,
+          onUpdate: (self) => {
+            const i = Math.min(projects.length, Math.max(1, Math.round(self.progress * (projects.length - 1)) + 1));
+            if (counterRef.current) counterRef.current.textContent = String(i).padStart(2, '0');
+            if (barRef.current) barRef.current.style.transform = `scaleX(${self.progress})`;
+          },
         },
+      });
+
+      // Each card swings in as it enters the viewport.
+      gsap.utils.toArray<HTMLElement>('.p-slot').forEach((slot, i) => {
+        gsap.fromTo(
+          slot,
+          { rotate: i % 2 ? 6 : -6, y: 80, scale: 0.88 },
+          {
+            rotate: i % 2 ? 1.5 : -1.5,
+            y: 0,
+            scale: 1,
+            ease: 'none',
+            scrollTrigger: {
+              trigger: slot,
+              containerAnimation: tween,
+              start: 'left 100%',
+              end: 'left 45%',
+              scrub: true,
+            },
+          },
+        );
+      });
+
+      gsap.fromTo(
+        '.p-bigtitle',
+        { xPercent: 0 },
+        {
+          xPercent: -40,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: 'top top',
+            end: () => `+=${distance()}`,
+            scrub: true,
+            invalidateOnRefresh: true,
+          },
+        },
+      );
+    }, sectionRef);
+
+    // Mobile / tablet: cards slide up one by one.
+    mm.add('(max-width: 1023px) and (prefers-reduced-motion: no-preference)', () => {
+      gsap.utils.toArray<HTMLElement>('.p-slot').forEach((slot, i) => {
+        gsap.from(slot, {
+          y: 80,
+          rotate: i % 2 ? 4 : -4,
+          opacity: 0,
+          duration: 0.9,
+          ease: 'expo.out',
+          scrollTrigger: { trigger: slot, start: 'top 88%' },
+        });
       });
     }, sectionRef);
 
-    return () => ctx.revert();
+    return () => mm.revert();
   }, []);
 
   return (
-    <section id="projects" ref={sectionRef} className="relative py-[12vh] px-6 lg:px-10">
-      <div className="max-w-[1200px] mx-auto">
-        <div ref={headerRef} className="text-center mb-16 lg:mb-24">
-          <div className="section-label mb-4">02 — PROJECTS · 作品集</div>
-          <h2
-            className="font-heading font-semibold text-soft-white"
-            style={{ fontSize: 'clamp(2.5rem, 6vw, 4rem)', lineHeight: 1.2 }}
-          >
-            CASE FILES
-          </h2>
-          <p className="font-ui text-xs tracking-[0.25em] text-white/40 mt-4">
-            {projects.length} CLASSIFIED ENTRIES · SCROLL TO DECRYPT
+    <section ref={sectionRef} id="projects" className="relative overflow-hidden bg-ink lg:h-screen">
+      <div className="pointer-events-none absolute inset-0 halftone opacity-40" />
+
+      {/* Header strip (fixed inside the pinned frame) */}
+      <div className="relative z-10 flex items-end justify-between px-5 pt-24 md:px-10 lg:absolute lg:inset-x-0 lg:top-0 lg:pt-24">
+        <div>
+          <span className="tag-label">02 — Missions</span>
+          <p className="mt-3 max-w-sm font-body text-sm text-paper/60">
+            Things I built that work in production, plus one movie recommender I'm still proud of.
           </p>
         </div>
-
-        <div className="perspective-container" style={{ perspective: '1400px' }}>
-          {projects.map((project, i) => (
-            <ProjectCard key={project.id} project={project} index={i} />
-          ))}
+        <div className="hidden items-center gap-4 lg:flex">
+          <span className="font-display text-4xl tabular-nums text-paper">
+            <span ref={counterRef}>01</span>
+            <span className="text-paper/30"> / {String(projects.length).padStart(2, '0')}</span>
+          </span>
+          <div className="h-1 w-40 bg-paper/15">
+            <div ref={barRef} className="h-full origin-left bg-blood" style={{ transform: 'scaleX(0)' }} />
+          </div>
         </div>
+      </div>
+
+      {/* Huge sliding title behind the cards */}
+      <div
+        aria-hidden="true"
+        className="p-bigtitle pointer-events-none absolute bottom-[-4vh] left-0 hidden whitespace-nowrap font-display uppercase leading-none text-outline opacity-[0.12] lg:block"
+        style={{ fontSize: '30vh' }}
+      >
+        Selected missions · Selected missions
+      </div>
+
+      <div
+        ref={trackRef}
+        className="relative z-10 flex flex-col gap-14 px-5 pb-28 pt-12 md:px-10 lg:h-full lg:w-max lg:flex-row lg:items-center lg:gap-16 lg:px-[8vw] lg:pb-0 lg:pt-16"
+      >
+        {/* Intro panel */}
+        <div className="flex shrink-0 flex-col justify-center lg:w-[38vw]">
+          <h2 className="font-display uppercase leading-[0.85]" style={{ fontSize: 'clamp(3.5rem, 9vw, 9rem)' }}>
+            Selected
+            <br />
+            <span className="text-blood">Missions</span>
+          </h2>
+          <div className="mt-8 hidden items-center gap-3 font-comic text-2xl text-pow lg:flex">
+            Keep scrolling, the cards move sideways
+            <span className="inline-block animate-[wiggle_1s_ease-in-out_infinite]">→</span>
+          </div>
+        </div>
+
+        {projects.map((p, i) => (
+          <div key={p.id} className="p-slot shrink-0 lg:min-h-[62vh] lg:w-[min(440px,32vw)] lg:[&>article]:min-h-[62vh]">
+            <ProjectCard project={p} index={i} />
+          </div>
+        ))}
+
+        {/* Outro card */}
+        <a
+          href="https://github.com/Shiivu13"
+          target="_blank"
+          rel="noopener noreferrer"
+          data-cursor="MORE"
+          className="p-slot group flex shrink-0 flex-col items-center justify-center gap-4 border-4 border-dashed border-paper/30 p-10 text-center transition-colors duration-300 hover:border-blood hover:bg-blood lg:h-[64vh] lg:w-[320px]"
+        >
+          <span className="font-display text-5xl uppercase leading-none transition-transform duration-500 group-hover:scale-110">
+            More on
+            <br />
+            GitHub
+          </span>
+          <ArrowUpRight size={48} className="transition-transform duration-500 group-hover:rotate-45" />
+        </a>
       </div>
     </section>
   );

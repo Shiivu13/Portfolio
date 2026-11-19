@@ -2,183 +2,167 @@ import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { skills, SKILL_CATEGORIES } from '../data/projects';
-import SkillRadar from '../components/SkillRadar';
 
 gsap.registerPlugin(ScrollTrigger);
 
-const SEGMENTS = 22;
+const SEGMENTS = 20;
 
-function SkillMeter({ skill, accent }: { skill: typeof skills[0]; accent: string }) {
-  const rowRef = useRef<HTMLDivElement>(null);
-  const percentRef = useRef<HTMLSpanElement>(null);
-  const lit = Math.round((skill.level / 100) * SEGMENTS);
+const TOOLBOX = [
+  'Python', 'PyTorch', 'YOLOv8', 'OpenCV', 'LangChain', 'Gemini', 'Whisper', 'FAISS',
+  'pgvector', 'FastAPI', 'PostgreSQL', 'Supabase', 'Docker', 'AWS', 'React', 'Streamlit',
+];
 
-  useEffect(() => {
-    const row = rowRef.current;
-    const percent = percentRef.current;
-    if (!row || !percent) return;
-
-    const ctx = gsap.context(() => {
-      const segs = row.querySelectorAll<HTMLElement>('[data-lit="1"]');
-      gsap.from(segs, {
-        scaleY: 0,
-        opacity: 0,
-        transformOrigin: 'bottom',
-        duration: 0.4,
-        stagger: 0.025,
-        ease: 'power2.out',
-        scrollTrigger: { trigger: row, start: 'top 90%', toggleActions: 'play none none reverse' },
-      });
-
-      const obj = { v: 0 };
-      gsap.to(obj, {
-        v: skill.level,
-        duration: 1.1,
-        ease: 'power2.out',
-        scrollTrigger: { trigger: row, start: 'top 90%', toggleActions: 'play none none reverse' },
-        onUpdate: () => {
-          percent.textContent = `${Math.round(obj.v)}`;
-        },
-      });
-    }, row);
-
-    return () => ctx.revert();
-  }, [skill.level]);
-
-  return (
-    <div ref={rowRef} className="group/skill mb-4">
-      <div className="flex items-baseline justify-between mb-1.5">
-        <span className="font-ui text-xs font-semibold tracking-wider text-soft-white/90 group-hover/skill:text-white transition-colors">
-          {skill.name}
-        </span>
-        <span className="font-broadcast text-base leading-none" style={{ color: accent }}>
-          <span ref={percentRef}>{skill.level}</span>
-          <span className="text-white/30 text-[0.7em]">%</span>
-        </span>
-      </div>
-      <div className="flex gap-[3px] h-3.5 items-stretch">
-        {Array.from({ length: SEGMENTS }).map((_, i) => {
-          const isLit = i < lit;
-          return (
-            <span
-              key={i}
-              data-lit={isLit ? '1' : '0'}
-              className="flex-1 rounded-[1px] will-change-transform"
-              style={{
-                background: isLit ? accent : 'rgba(255,255,255,0.07)',
-                boxShadow: isLit ? `0 0 6px ${accent}77` : 'none',
-                opacity: isLit ? 0.92 : 1,
-              }}
-            />
-          );
-        })}
-      </div>
-    </div>
-  );
-}
+const grouped = Object.entries(SKILL_CATEGORIES).map(([key, cat]) => ({
+  key,
+  name: cat.name,
+  items: skills.filter((s) => s.category === key),
+}));
 
 export default function SkillsSection() {
-  const sectionRef = useRef<HTMLDivElement>(null);
-  const headerRef = useRef<HTMLDivElement>(null);
-  const syncRef = useRef<HTMLSpanElement>(null);
-
-  // average skill = "synchronisation rate" (anime stat flavour)
-  const sync = Math.round(skills.reduce((a, s) => a + s.level, 0) / skills.length);
-
-  // group skills by category, preserving SKILL_CATEGORIES order
-  const grouped = Object.keys(SKILL_CATEGORIES).map((key) => ({
-    key,
-    cat: SKILL_CATEGORIES[key],
-    items: skills.filter((s) => s.category === key),
-  }));
+  const sectionRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
-    const ctx = gsap.context(() => {
-      gsap.from(headerRef.current, {
-        y: 50,
-        opacity: 0,
-        duration: 1,
-        ease: 'power2.out',
-        scrollTrigger: { trigger: sectionRef.current, start: 'top 70%', toggleActions: 'play none none reverse' },
+    const mm = gsap.matchMedia();
+
+    mm.add('(prefers-reduced-motion: no-preference)', () => {
+      gsap.from('.s-head span', {
+        yPercent: 110,
+        stagger: 0.08,
+        duration: 0.9,
+        ease: 'expo.out',
+        scrollTrigger: { trigger: '.s-head', start: 'top 85%' },
       });
 
-      const obj = { v: 0 };
-      gsap.to(obj, {
-        v: sync,
-        duration: 1.6,
-        ease: 'power2.out',
-        scrollTrigger: { trigger: sectionRef.current, start: 'top 60%', toggleActions: 'play none none reverse' },
-        onUpdate: () => {
-          if (syncRef.current) syncRef.current.textContent = `${Math.round(obj.v)}`;
-        },
+      // Spinning badge turns with scroll.
+      gsap.to('.s-badge', {
+        rotate: 360,
+        ease: 'none',
+        scrollTrigger: { trigger: sectionRef.current, start: 'top bottom', end: 'bottom top', scrub: true },
+      });
+
+      // Segmented power bars fill as each row scrolls into view.
+      gsap.utils.toArray<HTMLElement>('.s-row').forEach((row) => {
+        const segs = row.querySelectorAll<HTMLElement>('.s-seg.on');
+        const pct = row.querySelector<HTMLElement>('.s-pct');
+        const target = Number(pct?.dataset.to ?? 0);
+        const obj = { v: 0 };
+        gsap
+          .timeline({
+            scrollTrigger: { trigger: row, start: 'top 88%', end: 'top 55%', scrub: 0.5 },
+          })
+          .fromTo(segs, { scaleY: 0, opacity: 0.2 }, { scaleY: 1, opacity: 1, stagger: 0.05, ease: 'none' }, 0)
+          .to(
+            obj,
+            {
+              v: target,
+              ease: 'none',
+              duration: segs.length * 0.05,
+              onUpdate: () => {
+                if (pct) pct.textContent = String(Math.round(obj.v));
+              },
+            },
+            0,
+          )
+          .from(row.querySelector('.s-name'), { x: -30, opacity: 0, ease: 'none', duration: 0.4 }, 0);
+      });
+
+      gsap.from('.s-chip', {
+        y: 40,
+        opacity: 0,
+        rotate: () => gsap.utils.random(-20, 20),
+        stagger: 0.04,
+        duration: 0.7,
+        ease: 'back.out(2)',
+        clearProps: 'transform',
+        scrollTrigger: { trigger: '.s-toolbox', start: 'top 85%' },
       });
     }, sectionRef);
-    return () => ctx.revert();
-  }, [sync]);
+
+    return () => mm.revert();
+  }, []);
 
   return (
-    <section id="skills" ref={sectionRef} className="relative min-h-screen flex items-center py-[12vh] px-6 lg:px-10">
-      <div className="max-w-[1200px] mx-auto w-full">
-        <div ref={headerRef} className="text-center mb-12 lg:mb-16">
-          <div className="section-label mb-4">03 — SKILLS · 武器</div>
-          <h2 className="font-heading font-semibold text-soft-white" style={{ fontSize: 'clamp(2rem, 5vw, 3.5rem)', lineHeight: 1.2 }}>
-            TECH ARSENAL
-          </h2>
-        </div>
+    <section ref={sectionRef} id="skills" className="relative overflow-x-clip bg-blood py-28 text-ink md:py-40">
+      <div className="pointer-events-none absolute inset-0 halftone-ink opacity-40" />
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
-          {/* ---- Radar HUD panel ---- */}
-          <div className="lg:col-span-5">
-            <div
-              className="relative rounded-2xl border border-white/10 p-6 lg:p-8"
-              style={{ background: 'radial-gradient(120% 120% at 50% 0%, rgba(244,168,180,0.08), rgba(13,13,30,0.6))', backdropFilter: 'blur(10px)' }}
-            >
-              {/* corner brackets */}
-              <span className="absolute top-3 left-3 w-5 h-5 border-t-2 border-l-2 border-cyan/60" />
-              <span className="absolute top-3 right-3 w-5 h-5 border-t-2 border-r-2 border-cyan/60" />
-              <span className="absolute bottom-3 left-3 w-5 h-5 border-b-2 border-l-2 border-cyan/60" />
-              <span className="absolute bottom-3 right-3 w-5 h-5 border-b-2 border-r-2 border-cyan/60" />
+      <div className="relative mx-auto grid max-w-[1400px] grid-cols-1 gap-14 px-5 md:px-10 lg:grid-cols-12">
+        {/* Left: sticky heading */}
+        <div className="lg:col-span-5">
+          <div className="lg:sticky lg:top-28">
+            <span className="tag-label !text-ink/70 before:!bg-ink">03 — Powers</span>
+            <h2 className="s-head mt-5 font-display uppercase leading-[0.85]" style={{ fontSize: 'clamp(3.5rem, 9vw, 8.5rem)' }}>
+              <span className="block overflow-hidden"><span className="inline-block">Power</span></span>
+              <span className="block overflow-hidden"><span className="inline-block text-paper">Levels.</span></span>
+            </h2>
+            <p className="mt-6 max-w-sm font-body text-lg text-ink/80">
+              Self-reported, lightly exaggerated, but backed by real projects. Hover a row to see it flex.
+            </p>
 
-              <div className="flex items-center justify-between mb-2 font-ui text-[0.6rem] tracking-[0.25em] text-white/45">
-                <span>SKILL MATRIX</span>
-                <span className="flex items-center gap-1.5">
-                  <span className="w-1.5 h-1.5 rounded-full bg-cyan animate-pulse" />
-                  ANALYSIS COMPLETE
-                </span>
-              </div>
-
-              <SkillRadar skills={skills} />
-
-              {/* sync rate */}
-              <div className="mt-2 flex items-end justify-center gap-3">
-                <div className="text-center">
-                  <div className="font-ui text-[0.58rem] tracking-[0.3em] text-white/45 mb-1">SYNC RATE</div>
-                  <div className="font-broadcast leading-none text-soft-white" style={{ fontSize: 'clamp(2.5rem, 6vw, 3.5rem)' }}>
-                    <span ref={syncRef}>{sync}</span>
-                    <span className="text-cyan text-[0.5em]">.0%</span>
-                  </div>
-                </div>
-              </div>
+            <div className="s-badge relative mt-12 hidden h-44 w-44 lg:block">
+              <svg viewBox="0 0 200 200" className="h-full w-full">
+                <defs>
+                  <path id="skillcirc" d="M100,100 m-80,0 a80,80 0 1,1 160,0 a80,80 0 1,1 -160,0" />
+                </defs>
+                <circle cx="100" cy="100" r="98" className="fill-ink" />
+                <text className="fill-paper font-display text-[19px] uppercase tracking-[0.18em]">
+                  <textPath href="#skillcirc">AI · Backend · Cloud · Frontend ·</textPath>
+                </text>
+              </svg>
+              <span className="absolute inset-0 grid place-items-center font-comic text-5xl text-pow">⚡</span>
             </div>
           </div>
+        </div>
 
-          {/* ---- Category power meters ---- */}
-          <div className="lg:col-span-7 space-y-8">
-            {grouped.map((g) => (
-              <div key={g.key}>
-                <div className="flex items-center gap-3 mb-4">
-                  <span className="font-jp text-2xl leading-none" style={{ color: g.cat.accent }}>
-                    {g.cat.kanji}
-                  </span>
-                  <span className="font-ui text-xs font-semibold tracking-[0.2em] text-white/70">{g.cat.name}</span>
-                  <span className="flex-1 h-px" style={{ background: `linear-gradient(90deg, ${g.cat.accent}55, transparent)` }} />
-                  <span className="font-ui text-[0.6rem] text-white/35 tracking-widest">{g.items.length} MODULES</span>
-                </div>
-                {g.items.map((skill) => (
-                  <SkillMeter key={skill.name} skill={skill} accent={g.cat.accent} />
-                ))}
+        {/* Right: power bars */}
+        <div className="space-y-12 lg:col-span-7">
+          {grouped.map((g) => (
+            <div key={g.key}>
+              <div className="mb-4 flex items-center gap-3 border-b-4 border-ink pb-2">
+                <span className="font-display text-2xl uppercase tracking-wide">{g.name}</span>
               </div>
-            ))}
+              <ul className="space-y-3">
+                {g.items.map((s) => {
+                  const on = Math.round((s.level / 100) * SEGMENTS);
+                  return (
+                    <li
+                      key={s.name}
+                      data-cursor={`${s.level}%`}
+                      className="s-row group grid grid-cols-[1fr_auto] items-center gap-x-4 gap-y-2 border-[3px] border-ink bg-ink px-4 py-3 text-paper shadow-[5px_5px_0_#0B0B0C] transition-[transform,box-shadow,background-color] duration-300 hover:-translate-y-1 hover:translate-x-1 hover:bg-paper hover:text-ink hover:shadow-[8px_8px_0_#0B0B0C] md:grid-cols-[minmax(0,220px)_1fr_auto]"
+                    >
+                      <span className="s-name font-body text-sm font-semibold uppercase tracking-wide md:text-base">{s.name}</span>
+                      <span className="order-3 col-span-2 flex h-5 gap-[3px] group-hover:animate-[glitch_0.25s_steps(2)_2] md:order-none md:col-span-1">
+                        {Array.from({ length: SEGMENTS }, (_, i) => (
+                          <span
+                            key={i}
+                            className={`s-seg h-full flex-1 origin-bottom -skew-x-12 ${
+                              i < on ? 'on bg-blood' : 'bg-paper/10 group-hover:bg-ink/10'
+                            }`}
+                          />
+                        ))}
+                      </span>
+                      <span className="font-display text-2xl tabular-nums">
+                        <span className="s-pct" data-to={s.level}>{s.level}</span>
+                        <span className="text-base text-blood">%</span>
+                      </span>
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
+          ))}
+
+          <div className="s-toolbox pt-4">
+            <div className="mb-5 font-comic text-3xl">Also in the utility belt:</div>
+            <div className="flex flex-wrap gap-3">
+              {TOOLBOX.map((t) => (
+                <span
+                  key={t}
+                  className="s-chip border-[3px] border-ink bg-paper px-3 py-1.5 font-mono text-xs font-semibold uppercase tracking-[0.12em] text-ink shadow-[3px_3px_0_#0B0B0C] transition-transform duration-300 [transition-timing-function:cubic-bezier(.3,1.8,.4,1)] hover:-translate-y-1.5 hover:rotate-[-4deg] hover:scale-110 hover:bg-pow"
+                >
+                  {t}
+                </span>
+              ))}
+            </div>
           </div>
         </div>
       </div>

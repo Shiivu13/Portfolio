@@ -38,18 +38,18 @@ module.exports = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
-        sakura: "#F4A8B4",
-        cyan: "#7EC8E3",
-        midnight: "#2D2D5A",
-        "soft-white": "#F8F5F2",
-        "warm-gray": "#A89F99",
-        "deep-bg": "#1A1A3E",
+        blood: "#E10600",
+        "blood-deep": "#7A0000",
+        ink: "#0B0B0C",
+        "ink-2": "#151517",
+        paper: "#F3EDE2",
+        pow: "#FFD60A",
       },
       fontFamily: {
-        display: ['"Playfair Display"', 'serif'],
-        heading: ['"Playfair Display"', 'serif'],
-        body: ['Inter', 'sans-serif'],
-        ui: ['Inter', 'sans-serif'],
+        display: ['Anton', 'Impact', 'sans-serif'],
+        comic: ['Bangers', 'Anton', 'sans-serif'],
+        body: ['"Space Grotesk"', 'system-ui', 'sans-serif'],
+        mono: ['"JetBrains Mono"', 'ui-monospace', 'monospace'],
       },
       borderRadius: {
         xl: "calc(var(--radius) + 4px)",
@@ -61,7 +61,8 @@ module.exports = {
       boxShadow: {
         xs: "0 1px 2px 0 rgb(0 0 0 / 0.05)",
         card: "0 20px 60px rgba(0,0,0,0.3)",
-        glow: "0 0 40px rgba(244,168,180,0.3)",
+        glow: "0 0 40px rgba(225,6,0,0.45)",
+        comic: "8px 8px 0 #E10600",
       },
       keyframes: {
         "accordion-down": {

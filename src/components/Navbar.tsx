@@ -1,118 +1,150 @@
-import { useEffect, useState, useCallback } from 'react';
-import { Menu, X, Github, Linkedin, Twitter, FileText } from 'lucide-react';
+import { useEffect, useRef, useState } from 'react';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { scrollToId } from '../lib/scroll';
 
-const navLinks = [
-  { label: 'ABOUT', href: '#about' },
-  { label: 'PROJECTS', href: '#projects' },
-  { label: 'SKILLS', href: '#skills' },
-  { label: 'CONTACT', href: '#contact' },
+const links = [
+  { label: 'Origin', href: '#about' },
+  { label: 'Missions', href: '#projects' },
+  { label: 'Powers', href: '#skills' },
+  { label: 'Contact', href: '#contact' },
 ];
 
 export default function Navbar() {
-  const [scrolled, setScrolled] = useState(false);
-  const [mobileOpen, setMobileOpen] = useState(false);
+  const navRef = useRef<HTMLElement>(null);
+  const menuRef = useRef<HTMLDivElement>(null);
+  const [open, setOpen] = useState(false);
 
+  // Hide on scroll down, reveal on scroll up.
   useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 50);
-    };
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
+    const nav = navRef.current;
+    if (!nav) return;
+    const st = ScrollTrigger.create({
+      start: 120,
+      end: 'max',
+      onUpdate: (self) => {
+        gsap.to(nav, {
+          yPercent: self.direction === 1 ? -120 : 0,
+          duration: 0.45,
+          ease: 'power3.out',
+          overwrite: true,
+        });
+      },
+      onLeaveBack: () => gsap.to(nav, { yPercent: 0, duration: 0.3 }),
+    });
+    return () => st.kill();
   }, []);
 
-  const handleLinkClick = useCallback((e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
-    e.preventDefault();
-    setMobileOpen(false);
-    const el = document.querySelector(href);
-    if (el) {
-      el.scrollIntoView({ behavior: 'smooth' });
+  // Full-screen mobile menu.
+  useEffect(() => {
+    const menu = menuRef.current;
+    if (!menu) return;
+    if (open) {
+      gsap.set(menu, { display: 'flex' });
+      gsap.fromTo(
+        menu,
+        { clipPath: 'polygon(0 0, 100% 0, 100% 0, 0 0)' },
+        { clipPath: 'polygon(0 0, 100% 0, 100% 100%, 0 100%)', duration: 0.6, ease: 'expo.inOut' },
+      );
+      gsap.fromTo(
+        menu.querySelectorAll('.m-link'),
+        { yPercent: 120, rotate: 6 },
+        { yPercent: 0, rotate: 0, duration: 0.7, ease: 'expo.out', stagger: 0.06, delay: 0.25 },
+      );
+    } else {
+      gsap.to(menu, {
+        clipPath: 'polygon(0 0, 100% 0, 100% 0, 0 0)',
+        duration: 0.45,
+        ease: 'expo.in',
+        onComplete: () => {
+          gsap.set(menu, { display: 'none' });
+        },
+      });
     }
-  }, []);
+  }, [open]);
+
+  const go = (href: string) => (e: React.MouseEvent) => {
+    e.preventDefault();
+    setOpen(false);
+    scrollToId(href);
+  };
 
   return (
     <>
-      <nav
-        className={`fixed top-0 left-0 w-full z-[70] transition-all duration-500 ${
-          scrolled ? 'bg-deep-bg/90 backdrop-blur-md shadow-lg' : 'bg-transparent'
-        }`}
-      >
-        <div className="max-w-[1400px] mx-auto px-6 lg:px-10 h-20 flex items-center justify-between">
+      <nav ref={navRef} className="fixed inset-x-0 top-0 z-[70] px-5 py-4 md:px-10">
+        <div className="flex items-center justify-between">
           <a
             href="#hero"
-            onClick={(e) => handleLinkClick(e, '#hero')}
-            className="font-ui text-xs font-semibold uppercase tracking-[0.2em] text-soft-white hover:text-sakura transition-colors duration-300"
+            onClick={go('#hero')}
+            data-cursor="HOME"
+            className="group flex items-center gap-3"
+            aria-label="Back to top"
           >
-            SHIVANSH.TRIPATHI
+            <span className="relative grid h-11 w-11 place-items-center overflow-hidden rounded-full border-2 border-paper bg-blood transition-transform duration-500 group-hover:rotate-[360deg]">
+              <span className="absolute inset-y-0 right-0 w-1/2 bg-ink" />
+              <span className="relative font-display text-lg text-paper">ST</span>
+            </span>
+            <span className="hidden font-display text-xl uppercase tracking-wide sm:block">
+              Shivansh<span className="text-blood">.</span>
+            </span>
           </a>
 
-          <div className="hidden md:flex items-center gap-8">
-            {navLinks.map((link) => (
+          <div className="hidden items-center gap-1 rounded-full border-2 border-paper/15 bg-ink/70 px-2 py-1.5 backdrop-blur-md md:flex">
+            {links.map((l, i) => (
               <a
-                key={link.href}
-                href={link.href}
-                onClick={(e) => handleLinkClick(e, link.href)}
-                className="font-ui text-sm font-semibold uppercase text-soft-white hover:text-sakura transition-colors duration-300 link-underline"
+                key={l.href}
+                href={l.href}
+                onClick={go(l.href)}
+                className="roll-host group relative flex items-center gap-1.5 rounded-full px-4 py-2 font-mono text-xs uppercase tracking-[0.18em] text-paper/80 transition-colors hover:bg-blood hover:text-paper"
               >
-                {link.label}
+                <span className="text-[10px] text-blood transition-colors group-hover:text-ink">0{i + 1}</span>
+                <span className="roll">
+                  <span>{l.label}</span>
+                  <span>{l.label}</span>
+                </span>
               </a>
             ))}
-            <a
-              href="https://github.com/Shiivu13"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-soft-white hover:text-sakura transition-colors duration-300"
-            >
-              <Github size={20} />
-            </a>
           </div>
 
           <button
-            className="md:hidden text-soft-white hover:text-sakura transition-colors"
-            onClick={() => setMobileOpen(!mobileOpen)}
-            aria-label="Toggle menu"
+            type="button"
+            onClick={() => setOpen((o) => !o)}
+            data-cursor={open ? 'CLOSE' : 'MENU'}
+            aria-label={open ? 'Close menu' : 'Open menu'}
+            aria-expanded={open}
+            className="relative z-[80] grid h-12 w-12 place-items-center rounded-full border-2 border-paper bg-blood md:hidden"
           >
-            {mobileOpen ? <X size={24} /> : <Menu size={24} />}
+            <span
+              className="absolute h-0.5 w-5 bg-paper transition-transform duration-300"
+              style={{ transform: open ? 'rotate(45deg)' : 'translateY(-4px)' }}
+            />
+            <span
+              className="absolute h-0.5 w-5 bg-paper transition-transform duration-300"
+              style={{ transform: open ? 'rotate(-45deg)' : 'translateY(4px)' }}
+            />
           </button>
         </div>
       </nav>
 
-      {/* Mobile Menu Overlay */}
       <div
-        className={`fixed inset-0 z-40 bg-deep-bg/98 backdrop-blur-xl transition-all duration-500 ${
-          mobileOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
-        }`}
+        ref={menuRef}
+        className="fixed inset-0 z-[65] hidden flex-col justify-center gap-2 bg-blood px-8"
+        style={{ clipPath: 'polygon(0 0, 100% 0, 100% 0, 0 0)' }}
       >
-        <div className="flex flex-col items-center justify-center h-full gap-8">
-          {navLinks.map((link, i) => (
+        <div className="absolute inset-0 halftone-ink opacity-40" />
+        {links.map((l, i) => (
+          <div key={l.href} className="relative overflow-hidden">
             <a
-              key={link.href}
-              href={link.href}
-              onClick={(e) => handleLinkClick(e, link.href)}
-              className="font-heading text-2xl uppercase tracking-[0.1em] text-soft-white hover:text-sakura transition-all duration-300"
-              style={{
-                transitionDelay: mobileOpen ? `${i * 80}ms` : '0ms',
-                transform: mobileOpen ? 'translateY(0)' : 'translateY(20px)',
-                opacity: mobileOpen ? 1 : 0,
-              }}
+              href={l.href}
+              onClick={go(l.href)}
+              className="m-link block font-display text-[16vw] uppercase leading-[1.05] text-ink"
             >
-              {link.label}
-            </a>
-          ))}
-          <div className="flex gap-6 mt-8">
-            <a href="https://github.com/Shiivu13" target="_blank" rel="noopener noreferrer" className="text-soft-white hover:text-sakura transition-colors">
-              <Github size={24} />
-            </a>
-            <a href="#" className="text-soft-white hover:text-sakura transition-colors">
-              <Linkedin size={24} />
-            </a>
-            <a href="#" className="text-soft-white hover:text-sakura transition-colors">
-              <Twitter size={24} />
-            </a>
-            <a href="#" className="text-soft-white hover:text-sakura transition-colors">
-              <FileText size={24} />
+              <span className="mr-3 align-top font-mono text-sm text-paper">0{i + 1}</span>
+              {l.label}
             </a>
           </div>
-        </div>
+        ))}
+        <p className="relative mt-8 font-comic text-2xl text-paper">Pick one. Choose wisely.</p>
       </div>
     </>
   );
