@@ -151,7 +151,7 @@ export default function AboutSection() {
             data-cursor="HI!"
           >
             <img
-              src="/avatar-shivansh.jpg"
+              src={`${import.meta.env.BASE_URL}avatar-shivansh.jpg`}
               alt="Portrait of Shivansh Tripathi"
               loading="lazy"
               className="h-full w-full object-cover grayscale contrast-125 transition-[filter] duration-700 group-hover:grayscale-0"

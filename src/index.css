@@ -10,6 +10,7 @@
     --ink-2: #151517;
     --paper: #f3ede2;
     --pow: #ffd60a;
+    color-scheme: dark;
 
     /* shadcn tokens, re-tuned to the red/black palette */
     --background: 240 4% 4%;
