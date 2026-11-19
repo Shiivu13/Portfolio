@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import Terminal from '../components/Terminal';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -47,38 +48,25 @@ export default function AboutSection() {
         );
       });
 
-      // Portrait panel wipes open and drifts with scroll.
+      // Terminal swings up into place.
       gsap.fromTo(
-        '.a-portrait',
-        { clipPath: 'polygon(0 100%, 100% 100%, 100% 100%, 0 100%)' },
+        '.a-term',
+        { y: 80, rotate: -4, opacity: 0 },
         {
-          clipPath: 'polygon(0 0, 100% 0, 100% 100%, 0 100%)',
-          ease: 'none',
-          scrollTrigger: { trigger: '.a-portrait-wrap', start: 'top 85%', end: 'top 30%', scrub: 0.6 },
-        },
-      );
-      gsap.fromTo(
-        '.a-portrait img',
-        { scale: 1.35, yPercent: -8 },
-        {
-          scale: 1.05,
-          yPercent: 8,
-          ease: 'none',
-          scrollTrigger: { trigger: '.a-portrait-wrap', start: 'top bottom', end: 'bottom top', scrub: true },
-        },
-      );
-      gsap.fromTo(
-        '.a-caption',
-        { x: -60, rotate: -12, opacity: 0 },
-        {
-          x: 0,
-          rotate: -4,
+          y: 0,
+          rotate: -1.5,
           opacity: 1,
-          ease: 'back.out(2)',
-          duration: 0.8,
-          scrollTrigger: { trigger: '.a-portrait-wrap', start: 'top 45%' },
+          ease: 'none',
+          scrollTrigger: { trigger: '.a-term-wrap', start: 'top 90%', end: 'top 45%', scrub: 0.6 },
         },
       );
+      gsap.from('.a-note', {
+        scale: 0,
+        rotate: 20,
+        duration: 0.7,
+        ease: 'back.out(2.4)',
+        scrollTrigger: { trigger: '.a-term-wrap', start: 'top 40%' },
+      });
 
       // Big background word slides sideways.
       gsap.fromTo(
@@ -141,26 +129,13 @@ export default function AboutSection() {
       </div>
 
       <div className="relative mx-auto grid max-w-[1400px] grid-cols-1 gap-16 px-5 md:px-10 lg:grid-cols-12 lg:gap-10">
-        {/* Portrait */}
-        <div className="a-portrait-wrap relative mx-auto w-full max-w-[460px] self-start lg:sticky lg:top-28 lg:col-span-5 lg:mx-0">
-          <div className="absolute -right-4 -top-4 z-20 rotate-12 bg-blood px-3 py-1 font-comic text-xl text-paper shadow-[3px_3px_0_#0B0B0C]">
-            Issue #01
+        {/* Working terminal in place of a photo */}
+        <div className="a-term-wrap relative mx-auto w-full max-w-[520px] self-start lg:sticky lg:top-28 lg:col-span-5 lg:mx-0">
+          <div className="a-term">
+            <Terminal />
           </div>
-          <div
-            className="a-portrait group relative aspect-[4/5] overflow-hidden border-4 border-ink bg-ink shadow-[12px_12px_0_#E10600]"
-            data-cursor="HI!"
-          >
-            <img
-              src={`${import.meta.env.BASE_URL}avatar-shivansh.jpg`}
-              alt="Portrait of Shivansh Tripathi"
-              loading="lazy"
-              className="h-full w-full object-cover grayscale contrast-125 transition-[filter] duration-700 group-hover:grayscale-0"
-            />
-            <div className="absolute inset-0 bg-blood mix-blend-multiply transition-opacity duration-700 group-hover:opacity-0" />
-            <div className="absolute inset-0 halftone-ink opacity-40 mix-blend-multiply" />
-          </div>
-          <div className="a-caption absolute -bottom-8 -left-3 z-20 max-w-[78%] border-[3px] border-ink bg-pow px-4 py-2 font-comic text-lg leading-tight shadow-[4px_4px_0_#0B0B0C] md:text-xl">
-            Fig. 1: the suspect. Armed with Python and too many browser tabs.
+          <div className="a-note absolute -bottom-7 right-2 z-20 rotate-3 border-[3px] border-ink bg-pow px-3 py-1.5 font-comic text-lg leading-tight text-ink shadow-[4px_4px_0_#0B0B0C] md:-right-4 md:text-xl">
+            It's real. Type "help".
           </div>
         </div>
 
@@ -197,7 +172,7 @@ export default function AboutSection() {
                 className={`a-stat group relative grid h-36 w-36 place-items-center rounded-full border-4 border-ink text-center shadow-[5px_5px_0_#0B0B0C] md:h-40 md:w-40 ${s.color}`}
                 style={{ transform: `rotate(${s.rot}deg)` }}
               >
-                <div className="transition-transform duration-300 group-hover:animate-[wiggle_0.5s_ease-in-out]">
+                <div className="transition-transform duration-500 [transition-timing-function:cubic-bezier(.2,.8,.2,1)] group-hover:scale-110">
                   <div className="font-display text-5xl leading-none">
                     <span className="a-count tabular-nums" data-to={s.value}>
                       0

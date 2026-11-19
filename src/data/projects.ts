@@ -10,12 +10,15 @@ export interface Project {
   liveLabel?: string;
   /** Short category label shown on the card. */
   category: string;
+  /** What the robot sidekick says when you hover the card. */
+  quip: string;
   year: string;
 }
 
 export const projects: Project[] = [
   {
     id: "latencyzero",
+    quip: "It rewrites slow endpoints, then proves they still work.",
     title: "LatencyZero: Self-Fixing Load Tester",
     tags: ["FastAPI", "LLM", "AST", "SSE"],
     description:
@@ -27,6 +30,7 @@ export const projects: Project[] = [
   },
   {
     id: "screenrag",
+    quip: "Every interview question comes with receipts.",
     title: "ScreenRAG: Resume-Based Interviews",
     tags: ["FastAPI", "ChromaDB", "Gemini", "React"],
     description:
@@ -38,6 +42,7 @@ export const projects: Project[] = [
   },
   {
     id: "multi-agent",
+    quip: "A whole team of LLMs. They argue less than people do.",
     title: "Multi-Agent LLM Orchestration",
     tags: ["FastAPI", "pgvector", "Gemini", "Docker"],
     description:
@@ -48,6 +53,7 @@ export const projects: Project[] = [
   },
   {
     id: "parserguard",
+    quip: "Scrapers break. This one tells you exactly where.",
     title: "ParserGuard",
     tags: ["Rails 8", "MongoDB", "Sidekiq", "Nokogiri"],
     description:
@@ -58,6 +64,7 @@ export const projects: Project[] = [
   },
   {
     id: "ai-qna",
+    quip: "You can talk to a PDF here. Weird, but useful.",
     title: "Ask Your PDFs, Audio and Video",
     tags: ["RAG", "Whisper", "FAISS", "React"],
     description:
@@ -70,6 +77,7 @@ export const projects: Project[] = [
   },
   {
     id: "rufus-twin",
+    quip: "Ask it which laptop to buy. Go on.",
     title: "Rufus-Twin: Shopping Assistant",
     tags: ["React", "FastAPI", "Gemini", "Supabase"],
     description:
@@ -81,6 +89,7 @@ export const projects: Project[] = [
   },
   {
     id: "surveillance",
+    quip: "YOLOv8 watches the cameras so nobody has to.",
     title: "Smart Surveillance System",
     tags: ["YOLOv8", "FastAPI", "Celery", "Redis"],
     description:
@@ -91,6 +100,7 @@ export const projects: Project[] = [
   },
   {
     id: "fraud",
+    quip: "A fraud model that explains itself. Rare.",
     title: "Fraud Detection You Can Explain",
     tags: ["LightGBM", "SHAP", "FastAPI", "Docker"],
     description:
@@ -102,6 +112,7 @@ export const projects: Project[] = [
   },
   {
     id: "ai-eval",
+    quip: "An LLM judging other LLMs. Very fair. Probably.",
     title: "AI Evaluation Platform",
     tags: ["Python", "Streamlit", "Gemini", "LLM judge"],
     description:
@@ -112,6 +123,7 @@ export const projects: Project[] = [
   },
   {
     id: "job-board",
+    quip: "Plain Node, zero packages. Respect.",
     title: "Job Board With Saved Jobs",
     tags: ["Node.js", "REST", "node:test", "Vanilla JS"],
     description:
@@ -122,6 +134,7 @@ export const projects: Project[] = [
   },
   {
     id: "recommender",
+    quip: "His very first ML project. Still works!",
     title: "Movie Recommender",
     tags: ["Python", "Scikit-learn", "TF-IDF", "Streamlit"],
     description:

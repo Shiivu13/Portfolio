@@ -1,114 +1,69 @@
-import { useEffect, useRef, useState, type PointerEvent as RPointerEvent } from 'react';
+import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { ArrowUpRight, Github } from 'lucide-react';
 import { projects, type Project } from '../data/projects';
+import { companionSay } from '../lib/companion';
 
 gsap.registerPlugin(ScrollTrigger);
 
-const BURSTS = ['POW!', 'BAM!', 'ZAP!', 'BOOM!', 'WHAM!', 'KRAK!', 'THWIP!'];
-
 function ProjectCard({ project, index }: { project: Project; index: number }) {
-  const cardRef = useRef<HTMLElement>(null);
-  const [hover, setHover] = useState(false);
-
-  const onMove = (e: RPointerEvent<HTMLElement>) => {
-    const el = cardRef.current;
-    if (!el || e.pointerType !== 'mouse') return;
-    const r = el.getBoundingClientRect();
-    const px = (e.clientX - r.left) / r.width - 0.5;
-    const py = (e.clientY - r.top) / r.height - 0.5;
-    gsap.to(el, {
-      rotateY: px * 14,
-      rotateX: -py * 14,
-      duration: 0.5,
-      ease: 'power3.out',
-      transformPerspective: 900,
-    });
-    el.style.setProperty('--mx', `${(px + 0.5) * 100}%`);
-    el.style.setProperty('--my', `${(py + 0.5) * 100}%`);
-  };
-
-  const onLeave = () => {
-    setHover(false);
-    if (cardRef.current) {
-      gsap.to(cardRef.current, { rotateX: 0, rotateY: 0, duration: 0.8, ease: 'elastic.out(1, 0.45)' });
-    }
-  };
-
   const num = String(index + 1).padStart(2, '0');
 
   return (
     <article
-      ref={cardRef}
-      onPointerMove={onMove}
-      onPointerEnter={() => setHover(true)}
-      onPointerLeave={onLeave}
-      className="p-card panel group flex h-full w-full flex-col p-6 hover:shadow-[16px_16px_0_#E10600] md:p-8"
-      data-cursor=""
-      style={{ transformStyle: 'preserve-3d' }}
+      onPointerEnter={(e) => {
+        if (e.pointerType === 'mouse') companionSay({ text: project.quip, pose: 'point', hold: 2600 });
+      }}
+      className="p-card group relative flex h-full w-full flex-col border-[3px] border-paper bg-ink-2 p-6 shadow-[10px_10px_0_#E10600] transition-[transform,box-shadow] duration-500 [transition-timing-function:cubic-bezier(.2,.8,.2,1)] hover:-translate-y-2 hover:shadow-[16px_18px_0_#E10600] md:p-8"
     >
-      {/* Spotlight following the pointer */}
-      <div
-        className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
-        style={{
-          background: 'radial-gradient(420px circle at var(--mx,50%) var(--my,50%), rgba(225,6,0,0.22), transparent 60%)',
-        }}
-      />
+      {/* Red bar that draws across the top on hover */}
+      <span className="absolute inset-x-0 top-0 h-1.5 origin-left scale-x-0 bg-blood transition-transform duration-500 [transition-timing-function:cubic-bezier(.7,0,.2,1)] group-hover:scale-x-100" />
 
-      {/* Burst */}
-      <div
-        className="burst pointer-events-none absolute -right-8 -top-10 z-20 grid h-28 w-28 place-items-center bg-pow md:h-32 md:w-32"
-        style={{
-          transform: hover ? 'scale(1) rotate(-12deg)' : 'scale(0) rotate(-90deg)',
-          transition: 'transform .45s cubic-bezier(.3,1.8,.4,1)',
-        }}
-      >
-        <span className="font-comic text-2xl text-blood md:text-3xl" style={{ WebkitTextStroke: '1px #0B0B0C' }}>
-          {BURSTS[index % BURSTS.length]}
-        </span>
-      </div>
-
-      <header className="relative flex items-start justify-between gap-4" style={{ transform: 'translateZ(30px)' }}>
-        <div className="font-display text-6xl leading-none text-outline-red md:text-7xl">#{num}</div>
+      <header className="relative flex items-start justify-between gap-4">
+        <div className="relative font-display text-6xl leading-none md:text-7xl">
+          <span className="text-outline-red">#{num}</span>
+          {/* Solid copy revealed bottom-up on hover */}
+          <span
+            aria-hidden="true"
+            className="absolute inset-0 text-blood transition-[clip-path] duration-500 [clip-path:inset(100%_0_0_0)] [transition-timing-function:cubic-bezier(.7,0,.2,1)] group-hover:[clip-path:inset(0_0_0_0)]"
+          >
+            #{num}
+          </span>
+        </div>
         <div className="text-right font-mono text-[10px] uppercase leading-relaxed tracking-[0.2em] text-paper/60">
           <div>{project.category}</div>
           <div className="text-blood">{project.year}</div>
         </div>
       </header>
 
-      <h3
-        className="relative mt-6 font-display text-3xl uppercase leading-[0.95] text-paper md:text-4xl"
-        style={{ transform: 'translateZ(50px)' }}
-      >
-        {project.title}
+      <h3 className="relative mt-6 font-display text-3xl uppercase leading-[0.95] text-paper md:text-4xl">
+        <span className="bg-[linear-gradient(#E10600,#E10600)] bg-[length:0%_4px] bg-left-bottom bg-no-repeat pb-1 transition-[background-size] duration-500 [transition-timing-function:cubic-bezier(.7,0,.2,1)] group-hover:bg-[length:100%_4px]">
+          {project.title}
+        </span>
       </h3>
 
-      <p className="relative mt-4 flex-1 font-body text-sm leading-relaxed text-paper/70 md:text-base" style={{ transform: 'translateZ(20px)' }}>
+      <p className="relative mt-4 flex-1 font-body text-sm leading-relaxed text-paper/70 transition-colors duration-500 group-hover:text-paper/90 md:text-base">
         {project.description}
       </p>
 
-      <ul className="relative mt-6 flex flex-wrap gap-2" style={{ transform: 'translateZ(25px)' }}>
+      <ul className="relative mt-6 flex flex-wrap gap-2">
         {project.tags.map((t, i) => (
           <li
             key={t}
-            className="border-2 border-paper/80 px-2.5 py-1 font-mono text-[10px] uppercase tracking-[0.15em] text-paper transition-colors duration-200 group-hover:border-blood"
-            style={{ transform: `rotate(${(i % 2 ? 1 : -1) * 1.5}deg)` }}
+            className="border-2 border-paper/60 px-2.5 py-1 font-mono text-[10px] uppercase tracking-[0.15em] text-paper transition-colors duration-300 group-hover:border-blood group-hover:bg-blood"
+            style={{ transitionDelay: `${i * 60}ms` }}
           >
             {t}
           </li>
         ))}
       </ul>
 
-      <div
-        className="relative mt-8 flex items-center justify-between gap-3 border-t-2 border-paper/15 pt-5"
-        style={{ transform: 'translateZ(35px)' }}
-      >
+      <div className="relative mt-8 flex items-center justify-between gap-3 border-t-2 border-paper/15 pt-5">
         <a
           href={project.githubUrl}
           target="_blank"
           rel="noopener noreferrer"
-          data-cursor="CODE"
           className="flex items-center gap-2 font-display text-lg uppercase tracking-wide text-paper"
         >
           <Github size={18} />
@@ -119,11 +74,11 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
             href={project.liveUrl}
             target="_blank"
             rel="noopener noreferrer"
-            data-cursor="LIVE"
-            className="inline-flex items-center gap-1.5 border-2 border-paper px-3 py-1.5 font-display text-base uppercase tracking-wide text-paper transition-colors duration-300 hover:border-blood hover:bg-blood"
+            className="group/live relative inline-flex items-center gap-1.5 overflow-hidden border-2 border-paper px-3 py-1.5 font-display text-base uppercase tracking-wide text-paper transition-colors duration-300 hover:border-blood"
           >
-            {project.liveLabel ?? 'Live'}
-            <ArrowUpRight size={18} />
+            <span className="absolute inset-0 translate-y-full bg-blood transition-transform duration-300 group-hover/live:translate-y-0" />
+            <span className="relative">{project.liveLabel ?? 'Live'}</span>
+            <ArrowUpRight size={18} className="relative transition-transform duration-300 group-hover/live:-translate-y-0.5 group-hover/live:translate-x-0.5" />
           </a>
         ) : null}
       </div>

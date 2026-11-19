@@ -3,13 +3,12 @@ import gsap from 'gsap';
 
 /**
  * Custom cursor: a red dot that tracks the pointer exactly, plus a ring that
- * trails behind. Hovering anything with [data-cursor="LABEL"] (or a link /
- * button) blows the ring up and prints the label inside it.
+ * trails behind. Over a link or button the ring swells into a disc that
+ * inverts whatever is under it.
  */
 export default function Cursor() {
   const dotRef = useRef<HTMLDivElement>(null);
   const ringRef = useRef<HTMLDivElement>(null);
-  const [label, setLabel] = useState('');
   const [active, setActive] = useState(false);
   const [enabled] = useState(
     () => typeof window !== 'undefined' && window.matchMedia('(pointer: fine)').matches,
@@ -36,14 +35,8 @@ export default function Cursor() {
     };
 
     const onOver = (e: PointerEvent) => {
-      const el = (e.target as HTMLElement).closest<HTMLElement>('[data-cursor], a, button');
-      if (el) {
-        setActive(true);
-        setLabel(el.dataset.cursor ?? '');
-      } else {
-        setActive(false);
-        setLabel('');
-      }
+      const el = (e.target as HTMLElement).closest<HTMLElement>('[data-cursor], a, button, input');
+      setActive(Boolean(el));
     };
 
     const onDown = () => gsap.to(ring, { scale: 0.7, duration: 0.15 });
@@ -71,34 +64,25 @@ export default function Cursor() {
 
   if (!enabled) return null;
 
-  const big = active && label;
-
   return (
     <>
       <div
         ref={ringRef}
         aria-hidden="true"
-        className="pointer-events-none fixed left-0 top-0 z-[200] flex items-center justify-center rounded-full border-2 border-blood"
+        className="pointer-events-none fixed left-0 top-0 z-[200] rounded-full border-[1.5px] border-paper mix-blend-difference"
         style={{
-          width: big ? 96 : active ? 64 : 40,
-          height: big ? 96 : active ? 64 : 40,
-          background: big ? 'var(--blood)' : active ? 'rgba(225,6,0,0.12)' : 'transparent',
+          width: active ? 64 : 34,
+          height: active ? 64 : 34,
+          background: active ? 'var(--paper)' : 'transparent',
           transition:
-            'width .35s cubic-bezier(.2,.9,.3,1.3), height .35s cubic-bezier(.2,.9,.3,1.3), background .25s ease',
+            'width .45s cubic-bezier(.2,.8,.2,1), height .45s cubic-bezier(.2,.8,.2,1), background-color .3s ease',
         }}
-      >
-        <span
-          className="font-comic text-lg tracking-wider text-paper"
-          style={{ opacity: big ? 1 : 0, transition: 'opacity .2s ease' }}
-        >
-          {label}
-        </span>
-      </div>
+      />
       <div
         ref={dotRef}
         aria-hidden="true"
-        className="pointer-events-none fixed left-0 top-0 z-[201] h-2 w-2 rounded-full bg-blood"
-        style={{ opacity: big ? 0 : 1 }}
+        className="pointer-events-none fixed left-0 top-0 z-[201] h-1.5 w-1.5 rounded-full bg-blood"
+        style={{ opacity: active ? 0 : 1, transition: 'opacity .2s ease' }}
       />
     </>
   );

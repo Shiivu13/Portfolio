@@ -127,16 +127,18 @@ export default function SkillsSection() {
                     <li
                       key={s.name}
                       data-cursor={`${s.level}%`}
-                      className="s-row group grid grid-cols-[1fr_auto] items-center gap-x-4 gap-y-2 border-[3px] border-ink bg-ink px-4 py-3 text-paper shadow-[5px_5px_0_#0B0B0C] transition-[transform,box-shadow,background-color] duration-300 hover:-translate-y-1 hover:translate-x-1 hover:bg-paper hover:text-ink hover:shadow-[8px_8px_0_#0B0B0C] md:grid-cols-[minmax(0,220px)_1fr_auto]"
+                      className="s-row group relative grid grid-cols-[1fr_auto] items-center gap-x-4 gap-y-2 overflow-hidden border-[3px] border-ink bg-ink px-4 py-3 text-paper shadow-[5px_5px_0_#0B0B0C] transition-[transform,box-shadow] duration-500 [transition-timing-function:cubic-bezier(.2,.8,.2,1)] hover:translate-x-1.5 hover:shadow-[9px_5px_0_#0B0B0C] md:grid-cols-[minmax(0,220px)_1fr_auto]"
                     >
-                      <span className="s-name font-body text-sm font-semibold uppercase tracking-wide md:text-base">{s.name}</span>
-                      <span className="order-3 col-span-2 flex h-5 gap-[3px] group-hover:animate-[glitch_0.25s_steps(2)_2] md:order-none md:col-span-1">
+                      <span className="pointer-events-none absolute inset-y-0 left-0 w-1 origin-bottom scale-y-0 bg-pow transition-transform duration-500 group-hover:scale-y-100" />
+                      <span className="s-name font-body text-sm font-semibold uppercase tracking-wide transition-colors duration-300 group-hover:text-pow md:text-base">{s.name}</span>
+                      <span className="order-3 col-span-2 flex h-5 gap-[3px] md:order-none md:col-span-1">
                         {Array.from({ length: SEGMENTS }, (_, i) => (
                           <span
                             key={i}
-                            className={`s-seg h-full flex-1 origin-bottom -skew-x-12 ${
-                              i < on ? 'on bg-blood' : 'bg-paper/10 group-hover:bg-ink/10'
+                            className={`s-seg h-full flex-1 origin-bottom -skew-x-12 transition-colors duration-300 ${
+                              i < on ? 'on bg-blood group-hover:bg-pow' : 'bg-paper/10'
                             }`}
+                            style={i < on ? { transitionDelay: `${i * 18}ms` } : undefined}
                           />
                         ))}
                       </span>
@@ -157,7 +159,7 @@ export default function SkillsSection() {
               {TOOLBOX.map((t) => (
                 <span
                   key={t}
-                  className="s-chip border-[3px] border-ink bg-paper px-3 py-1.5 font-mono text-xs font-semibold uppercase tracking-[0.12em] text-ink shadow-[3px_3px_0_#0B0B0C] transition-transform duration-300 [transition-timing-function:cubic-bezier(.3,1.8,.4,1)] hover:-translate-y-1.5 hover:rotate-[-4deg] hover:scale-110 hover:bg-pow"
+                  className="s-chip border-[3px] border-ink bg-paper px-3 py-1.5 font-mono text-xs font-semibold uppercase tracking-[0.12em] text-ink shadow-[3px_3px_0_#0B0B0C] transition-[transform,background-color] duration-300 [transition-timing-function:cubic-bezier(.2,.8,.2,1)] hover:-translate-y-1 hover:bg-pow"
                 >
                   {t}
                 </span>

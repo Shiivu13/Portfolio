@@ -110,10 +110,7 @@ export default function HeroSection({ ready }: { ready: boolean }) {
 
       {/* Top meta row */}
       <div className="h-fade absolute inset-x-0 top-24 z-10 flex justify-between px-5 md:top-28 md:px-10">
-        <span className="h-meta tag-label">AI / ML · Backend · Cloud</span>
-        <span className="h-meta hidden font-mono text-[11px] uppercase tracking-[0.25em] text-paper/50 md:block">
-          India · Open to work
-        </span>
+        <span className="h-meta tag-label">AI / ML · Backend · Open to work</span>
       </div>
 
       {/* Name */}
@@ -179,7 +176,7 @@ export default function HeroSection({ ready }: { ready: boolean }) {
       </div>
 
       {/* Bottom row */}
-      <div className="h-fade absolute inset-x-0 bottom-0 z-20 flex flex-col gap-6 px-5 pb-8 md:flex-row md:items-end md:justify-between md:px-10 md:pb-10">
+      <div className="h-fade absolute inset-x-0 bottom-0 z-20 flex flex-col gap-6 px-5 pb-8 md:flex-row md:items-end md:justify-between md:px-10 md:pb-10 md:pr-[170px]">
         <p className="h-meta max-w-md font-body text-base text-paper/80 md:text-lg">
           I'm a software engineer. Most of my work is <span className="text-paper">computer vision</span>,{' '}
           <span className="text-paper">LLM apps</span> and the FastAPI backends that keep them running.

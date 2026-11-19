@@ -12,10 +12,13 @@ export function getLenis() {
 
 /** Smooth-scroll to a section, going through Lenis when it is running. */
 export function scrollToId(href: string) {
-  const el = document.querySelector<HTMLElement>(href);
+  let el = document.querySelector<HTMLElement>(href);
   if (!el) return;
+  // Pinned sections sit inside a GSAP pin-spacer; measure that, since the
+  // section itself is shifted while pinned.
+  if (el.parentElement?.classList.contains('pin-spacer')) el = el.parentElement;
   if (lenis) {
-    lenis.scrollTo(el, { duration: 1.6 });
+    lenis.scrollTo(href === '#hero' ? 0 : el, { duration: 1.6 });
   } else {
     el.scrollIntoView({ behavior: 'smooth' });
   }

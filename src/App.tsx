@@ -6,6 +6,7 @@ import Navbar from './components/Navbar';
 import Cursor from './components/Cursor';
 import Preloader from './components/Preloader';
 import ScrollHUD from './components/ScrollHUD';
+import Companion from './components/Companion';
 import Marquee from './components/Marquee';
 import HeroSection from './sections/HeroSection';
 import AboutSection from './sections/AboutSection';
@@ -59,6 +60,7 @@ export default function App() {
       <div className="grain" aria-hidden="true" />
       <Navbar />
       <ScrollHUD />
+      <Companion ready={ready} />
 
       <main className="relative">
         <HeroSection ready={ready} />
