@@ -126,7 +126,6 @@ export default function SkillsSection() {
                   return (
                     <li
                       key={s.name}
-                      data-cursor={`${s.level}%`}
                       className="s-row group relative grid grid-cols-[1fr_auto] items-center gap-x-4 gap-y-2 overflow-hidden border-[3px] border-ink bg-ink px-4 py-3 text-paper shadow-[5px_5px_0_#0B0B0C] transition-[transform,box-shadow] duration-500 [transition-timing-function:cubic-bezier(.2,.8,.2,1)] hover:translate-x-1.5 hover:shadow-[9px_5px_0_#0B0B0C] md:grid-cols-[minmax(0,220px)_1fr_auto]"
                     >
                       <span className="pointer-events-none absolute inset-y-0 left-0 w-1 origin-bottom scale-y-0 bg-pow transition-transform duration-500 group-hover:scale-y-100" />

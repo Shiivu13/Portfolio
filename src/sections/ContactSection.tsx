@@ -114,7 +114,6 @@ export default function ContactSection() {
             <button
               type="button"
               onClick={copyEmail}
-              data-cursor={copied ? 'NICE!' : 'COPY'}
               className="c-row group flex w-full items-center justify-between gap-4 border-y-2 border-paper/15 py-6 text-left"
             >
               <div>
@@ -167,7 +166,6 @@ export default function ContactSection() {
             <Magnetic strength={0.45}>
               <a
                 href={`mailto:${EMAIL}`}
-                data-cursor="SEND"
                 className="c-cta group relative grid h-60 w-60 place-items-center rounded-full border-4 border-paper bg-blood shadow-[10px_10px_0_#F3EDE2] transition-shadow duration-300 hover:shadow-[4px_4px_0_#F3EDE2] md:h-72 md:w-72"
               >
                 <svg
@@ -201,7 +199,6 @@ export default function ContactSection() {
           <button
             type="button"
             onClick={() => scrollToId('#hero')}
-            data-cursor="UP!"
             className="group inline-flex items-center gap-2 self-start font-mono text-[11px] uppercase tracking-[0.2em] text-paper/70 hover:text-blood md:self-auto"
           >
             Back to top

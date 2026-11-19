@@ -76,7 +76,6 @@ export default function Navbar() {
           <a
             href="#hero"
             onClick={go('#hero')}
-            data-cursor="HOME"
             className="group flex items-center gap-3"
             aria-label="Back to top"
           >
@@ -109,7 +108,6 @@ export default function Navbar() {
           <button
             type="button"
             onClick={() => setOpen((o) => !o)}
-            data-cursor={open ? 'CLOSE' : 'MENU'}
             aria-label={open ? 'Close menu' : 'Open menu'}
             aria-expanded={open}
             className="relative z-[80] grid h-12 w-12 place-items-center rounded-full border-2 border-paper bg-blood md:hidden"

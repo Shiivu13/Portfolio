@@ -233,7 +233,6 @@ export default function ProjectsSection() {
           href="https://github.com/Shiivu13"
           target="_blank"
           rel="noopener noreferrer"
-          data-cursor="MORE"
           className="p-slot group flex shrink-0 flex-col items-center justify-center gap-4 border-4 border-dashed border-paper/30 p-10 text-center transition-colors duration-300 hover:border-blood hover:bg-blood lg:h-[64vh] lg:w-[320px]"
         >
           <span className="font-display text-5xl uppercase leading-none transition-transform duration-500 group-hover:scale-110">

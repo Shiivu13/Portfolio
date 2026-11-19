@@ -150,7 +150,6 @@ export default function HeroSection({ ready }: { ready: boolean }) {
         <div className="h-emblem">
         <div
           className="relative grid h-32 w-32 place-items-center rounded-full border-4 border-paper bg-blood shadow-[6px_6px_0_#0B0B0C] transition-transform duration-700 [transition-timing-function:cubic-bezier(.3,1.6,.4,1)] hover:rotate-[200deg] hover:scale-110 lg:h-40 lg:w-40"
-          data-cursor="HEY!"
         >
           <span className="absolute inset-y-0 right-0 w-1/2 rounded-r-full bg-ink" />
           <span className="absolute h-[115%] w-2 rotate-[20deg] bg-paper" />
@@ -189,7 +188,6 @@ export default function HeroSection({ ready }: { ready: boolean }) {
                 e.preventDefault();
                 scrollToId('#projects');
               }}
-              data-cursor="GO!"
               className="group relative inline-flex items-center gap-3 overflow-hidden border-[3px] border-paper bg-blood px-7 py-4 font-display text-lg uppercase tracking-wide text-paper shadow-[6px_6px_0_#F3EDE2] transition-[box-shadow,transform] duration-300 hover:translate-x-[3px] hover:translate-y-[3px] hover:shadow-[3px_3px_0_#F3EDE2]"
             >
               <span className="absolute inset-0 -translate-x-full bg-ink transition-transform duration-500 [transition-timing-function:cubic-bezier(.7,0,.2,1)] group-hover:translate-x-0" />
