@@ -87,7 +87,7 @@ export default function ContactSection() {
       <div className="pointer-events-none absolute inset-0 halftone opacity-40" />
 
       <div className="relative mx-auto max-w-[1400px] px-5 md:px-10">
-        <span className="tag-label">04 — Contact</span>
+        <span className="tag-label">04 / Contact</span>
         <p className="mt-4 font-comic text-2xl text-pow md:text-3xl">Got a mission? I've got a keyboard.</p>
 
         <h2
@@ -158,7 +158,7 @@ export default function ContactSection() {
               style={{ opacity: copied ? 1 : 0 }}
               aria-live="polite"
             >
-              {copied ? 'Copied to clipboard. Look at you, being efficient.' : ''}
+              {copied ? 'Copied. Talk soon.' : ''}
             </p>
           </div>
 

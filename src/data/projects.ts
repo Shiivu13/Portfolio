@@ -1,104 +1,134 @@
 export interface Project {
-  id: number;
+  id: string;
   title: string;
   tags: string[];
   description: string;
   githubUrl: string;
-  /** Accent colour for the holographic case-file card. */
-  accent: string;
-  /** Japanese motif shown as a watermark on the card. */
-  kanji: string;
-  /** Short category / classification label. */
+  /** Live app or demo video, when there is one. */
+  liveUrl?: string;
+  /** Button text for liveUrl. Defaults to "Live". */
+  liveLabel?: string;
+  /** Short category label shown on the card. */
   category: string;
-  /** Lucide icon key (mapped in ProjectsSection). */
-  icon: string;
-  /** Short status / year tag for the HUD header. */
   year: string;
 }
 
 export const projects: Project[] = [
   {
-    id: 8,
-    title: "Real-Time Multi-Agent LLM Orchestration",
-    tags: ["FastAPI", "Multi-Agent", "pgvector", "Docker"],
-    description: "Production-grade async backend that orchestrates specialized LLM sub-agents to solve complex queries through dynamic routing, shared context, and self-improving evaluation loops. Built on FastAPI, PostgreSQL + pgvector, and Docker with real-time SSE streaming.",
+    id: "latencyzero",
+    title: "LatencyZero: Self-Fixing Load Tester",
+    tags: ["FastAPI", "LLM", "AST", "SSE"],
+    description:
+      "Load tests a FastAPI endpoint, finds the handler behind it and asks an LLM for a faster version. The rewrite only gets mounted if it returns exactly the same response as the original. If it doesn't, the error goes back to the model for another try. You get before and after latency numbers plus a patch you can git apply. Built for the BharatCode Hackathon 2026.",
+    githubUrl: "https://github.com/Shiivu13/LatencyZero---Autonomous-API-Load-Tester-Self-Healing-Code-Optimizer",
+    liveUrl: "https://latencyzero-8ejj.onrender.com/",
+    category: "Dev tools",
+    year: "2026",
+  },
+  {
+    id: "screenrag",
+    title: "ScreenRAG: Resume-Based Interviews",
+    tags: ["FastAPI", "ChromaDB", "Gemini", "React"],
+    description:
+      "Upload a resume, pick a role, and it runs a screening interview. It reads the resume, decides what to probe, and pulls questions from that role's textbooks, so every question points back to a line on the resume and a page in a book. Retrieval mixes dense search with BM25. It works with no API key; Gemini just makes the questions read better.",
+    githubUrl: "https://github.com/Shiivu13/AI-powered-role-based-candidate-screening-system",
+    liveUrl: "https://ai-powered-role-based-candidate-scr-sage.vercel.app",
+    category: "RAG / Hiring",
+    year: "2026",
+  },
+  {
+    id: "multi-agent",
+    title: "Multi-Agent LLM Orchestration",
+    tags: ["FastAPI", "pgvector", "Gemini", "Docker"],
+    description:
+      "An async FastAPI backend that splits a hard question across several specialised LLM agents. A router picks which agents to call, they share context through Postgres and pgvector, and an evaluation step scores the answers so later runs improve. Responses stream back over SSE, and one docker-compose command brings the whole stack up.",
     githubUrl: "https://github.com/Shiivu13/Multi-AgentLLM",
-    accent: "#C8A8F4",
-    kanji: "連携",
-    category: "LLM ORCHESTRATION",
-    icon: "agents",
+    category: "LLM backend",
     year: "2026",
   },
   {
-    id: 7,
-    title: "Rufus-Twin: AI Shopping Assistant",
-    tags: ["React", "FastAPI", "Gemini AI", "Supabase"],
-    description: "A smart AI shopping assistant that uses Gemini AI and Tavily Search for real-time web research and product comparisons. Features a sleek React + Vite glassmorphic frontend and a FastAPI + Supabase backend.",
-    githubUrl: "https://github.com/Shiivu13/Rufus-Twin",
-    accent: "#7EC8E3",
-    kanji: "助手",
-    category: "AI ASSISTANT",
-    icon: "bot",
-    year: "2025",
+    id: "parserguard",
+    title: "ParserGuard",
+    tags: ["Rails 8", "MongoDB", "Sidekiq", "Nokogiri"],
+    description:
+      "Scrapers that read Google results break the day a class name changes. ParserGuard compares each new capture of a results page with a known good one, works out which parser fields stopped extracting, and ranks CSS selectors that would find the old values again. A person reviews the suggestion and accepts it.",
+    githubUrl: "https://github.com/Shiivu13/parserguard",
+    category: "Scraping / Ruby",
+    year: "2026",
   },
   {
-    id: 9,
-    title: "AI Document & Multimedia Q&A",
-    tags: ["RAG", "Gemini AI", "Whisper", "FAISS"],
-    description: "Full-stack RAG platform to chat with your PDFs, audio, and video. Generates executive summaries and timestamped transcripts via Whisper, grounds Gemini answers in local FAISS embeddings, and ships a polished React UI backed by PostgreSQL and Docker.",
+    id: "ai-qna",
+    title: "Ask Your PDFs, Audio and Video",
+    tags: ["RAG", "Whisper", "FAISS", "React"],
+    description:
+      "Upload a PDF, an MP3 or a video and ask it questions. PDFs get a summary, audio and video get timestamped transcripts from Whisper, and Gemini answers from local FAISS embeddings of your file. Click a timestamp in the chat and the player jumps to that moment.",
     githubUrl: "https://github.com/Shiivu13/Ai_QnA",
-    accent: "#86E3CE",
-    kanji: "質問",
-    category: "RAG / GENAI",
-    icon: "qa",
+    liveUrl: "https://www.loom.com/share/1b2abed615b846dc9354e5145ee07e39",
+    liveLabel: "Demo video",
+    category: "RAG / GenAI",
     year: "2026",
   },
   {
-    id: 1,
-    title: "AI-Powered Smart Surveillance",
-    tags: ["Python", "YOLOv8", "FastAPI", "AWS"],
-    description: "Real-time surveillance system with YOLOv8 human detection, face recognition, behavioral analysis, and AWS cloud deployment. Features live analytics dashboard and event-driven FastAPI backend.",
-    githubUrl: "https://github.com/Shiivu13/AI-Powered-Smart-Surveillance-System",
-    accent: "#FF8DA1",
-    kanji: "監視",
-    category: "COMPUTER VISION",
-    icon: "scan",
-    year: "2024",
-  },
-  {
-    id: 2,
-    title: "AI Evaluation Platform",
-    tags: ["Python", "Streamlit", "GenAI", "Gemini"],
-    description: "A framework to evaluate and compare Generative AI models using rule-based + LLM-as-a-judge scoring for clarity, risk, consistency, and RAG metrics. Built with Streamlit dashboard.",
-    githubUrl: "https://github.com/Shiivu13/AI_evaluation_platform",
-    accent: "#9D8DF1",
-    kanji: "評価",
-    category: "GENERATIVE AI",
-    icon: "gauge",
+    id: "rufus-twin",
+    title: "Rufus-Twin: Shopping Assistant",
+    tags: ["React", "FastAPI", "Gemini", "Supabase"],
+    description:
+      "Ask it something like \"MacBook Air or iPad Pro?\" and it searches the web with Tavily, compares the options with Gemini and answers in a chat. React and Vite on the front, FastAPI and Supabase on the back.",
+    githubUrl: "https://github.com/Shiivu13/Rufus-Twin",
+    liveUrl: "https://romantic-creativity-production-130d.up.railway.app/",
+    category: "AI assistant",
     year: "2025",
   },
   {
-    id: 3,
-    title: "Fraud Detection System",
-    tags: ["Python", "LightGBM", "SHAP", "Docker"],
-    description: "End-to-end fraud detection with imbalanced data handling, PR-AUC optimization, SHAP explainability, and Dockerized FastAPI deployment. Live demo available on Streamlit.",
-    githubUrl: "https://github.com/Shiivu13/end-to-end-Fraud-Detection-System-with-explanibility-",
-    accent: "#F4C77E",
-    kanji: "検出",
-    category: "ML / SECURITY",
-    icon: "shield",
+    id: "surveillance",
+    title: "Smart Surveillance System",
+    tags: ["YOLOv8", "FastAPI", "Celery", "Redis"],
+    description:
+      "Live camera monitoring. YOLOv8 spots people, face recognition separates known faces from strangers, and Gemini handles the slower, deeper analysis. A classroom mode tracks whether students are paying attention. Events show up on a live dashboard, and everything runs in Docker.",
+    githubUrl: "https://github.com/Shiivu13/AI-Powered-Smart-Surveillance-System",
+    category: "Computer vision",
     year: "2024",
   },
   {
-    id: 5,
+    id: "fraud",
+    title: "Fraud Detection You Can Explain",
+    tags: ["LightGBM", "SHAP", "FastAPI", "Docker"],
+    description:
+      "Fraud data is mostly legit transactions, so accuracy tells you nothing. This one is tuned on PR-AUC, the cut-off comes from what a missed fraud costs, and SHAP shows why each transaction got flagged. The model is served from a Dockerized FastAPI, with a Streamlit demo on top.",
+    githubUrl: "https://github.com/Shiivu13/end-to-end-Fraud-Detection-System-with-explanibility-",
+    liveUrl: "https://demofrauddetection.streamlit.app/",
+    category: "ML / Security",
+    year: "2024",
+  },
+  {
+    id: "ai-eval",
+    title: "AI Evaluation Platform",
+    tags: ["Python", "Streamlit", "Gemini", "LLM judge"],
+    description:
+      "A Streamlit app for comparing generative models side by side. Outputs get scored with fixed rules and with an LLM acting as judge, on clarity, risk, consistency and RAG quality.",
+    githubUrl: "https://github.com/Shiivu13/AI_evaluation_platform",
+    category: "Generative AI",
+    year: "2025",
+  },
+  {
+    id: "job-board",
+    title: "Job Board With Saved Jobs",
+    tags: ["Node.js", "REST", "node:test", "Vanilla JS"],
+    description:
+      "A small job board written in plain Node, with no packages at all. You can save and remove jobs, saved jobs survive a server restart, and the API sends proper status codes for bad input. Tests use Node's built-in runner. I built it as a work sample.",
+    githubUrl: "https://github.com/Shiivu13/job-board-saved-jobs",
+    category: "Full stack",
+    year: "2026",
+  },
+  {
+    id: "recommender",
     title: "Movie Recommender",
     tags: ["Python", "Scikit-learn", "TF-IDF", "Streamlit"],
-    description: "Content-based movie recommender using TF-IDF vectorization and cosine similarity. Features an interactive Streamlit frontend deployed to Streamlit Cloud.",
+    description:
+      "My first ML project. Pick a movie and it suggests similar ones using TF-IDF and cosine similarity. The notebooks go day by day, from cleaning the data to the Streamlit app.",
     githubUrl: "https://github.com/Shiivu13/Project-1-Recommender",
-    accent: "#6FD3E3",
-    kanji: "推薦",
-    category: "MACHINE LEARNING",
-    icon: "film",
+    liveUrl: "https://recommendermovies.streamlit.app/",
+    category: "Machine learning",
     year: "2023",
   },
 ];
@@ -106,34 +136,26 @@ export const projects: Project[] = [
 export interface Skill {
   name: string;
   level: number;
-  /** Short label used on the radar axes. */
-  short: string;
-  /** Domain key — maps to SKILL_CATEGORIES. */
+  /** Domain key, see SKILL_CATEGORIES. */
   category: string;
 }
 
 export const skills: Skill[] = [
-  { name: "Python / ML", level: 95, short: "PYTHON", category: "ai" },
-  { name: "Computer Vision (YOLO, OpenCV)", level: 88, short: "VISION", category: "ai" },
-  { name: "GenAI / LLM Evaluation", level: 85, short: "GENAI", category: "ai" },
-  { name: "FastAPI / Backend", level: 90, short: "FASTAPI", category: "backend" },
-  { name: "SQL / PostgreSQL", level: 82, short: "SQL", category: "backend" },
-  { name: "AWS (EC2, S3, Lambda)", level: 85, short: "AWS", category: "cloud" },
-  { name: "Docker / DevOps", level: 80, short: "DOCKER", category: "cloud" },
-  { name: "React / Node.js", level: 70, short: "REACT", category: "frontend" },
-  { name: "Streamlit / Frontend", level: 75, short: "STREAMLIT", category: "frontend" },
-  { name: "Java", level: 65, short: "JAVA", category: "backend" },
+  { name: "Python / ML", level: 95, category: "ai" },
+  { name: "Computer Vision (YOLO, OpenCV)", level: 88, category: "ai" },
+  { name: "GenAI / LLM Evaluation", level: 85, category: "ai" },
+  { name: "FastAPI / Backend", level: 90, category: "backend" },
+  { name: "SQL / PostgreSQL", level: 82, category: "backend" },
+  { name: "Java", level: 65, category: "backend" },
+  { name: "AWS (EC2, S3, Lambda)", level: 85, category: "cloud" },
+  { name: "Docker / DevOps", level: 80, category: "cloud" },
+  { name: "React / Node.js", level: 70, category: "frontend" },
+  { name: "Streamlit / Frontend", level: 75, category: "frontend" },
 ];
 
-export interface SkillCategory {
-  name: string;
-  kanji: string;
-  accent: string;
-}
-
-export const SKILL_CATEGORIES: Record<string, SkillCategory> = {
-  ai: { name: "AI / MACHINE LEARNING", kanji: "知能", accent: "#F4A8B4" },
-  backend: { name: "BACKEND / DATA", kanji: "基盤", accent: "#7EC8E3" },
-  cloud: { name: "CLOUD / DEVOPS", kanji: "雲", accent: "#9D8DF1" },
-  frontend: { name: "FRONTEND", kanji: "画面", accent: "#F4C77E" },
+export const SKILL_CATEGORIES: Record<string, { name: string }> = {
+  ai: { name: "AI / Machine learning" },
+  backend: { name: "Backend / Data" },
+  cloud: { name: "Cloud / DevOps" },
+  frontend: { name: "Frontend" },
 };

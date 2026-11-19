@@ -100,22 +100,33 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
         ))}
       </ul>
 
-      <a
-        href={project.githubUrl}
-        target="_blank"
-        rel="noopener noreferrer"
-        data-cursor="CODE"
-        className="relative mt-8 inline-flex items-center justify-between border-t-2 border-paper/15 pt-5 font-display text-lg uppercase tracking-wide text-paper"
+      <div
+        className="relative mt-8 flex items-center justify-between gap-3 border-t-2 border-paper/15 pt-5"
         style={{ transform: 'translateZ(35px)' }}
       >
-        <span className="flex items-center gap-2">
+        <a
+          href={project.githubUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          data-cursor="CODE"
+          className="flex items-center gap-2 font-display text-lg uppercase tracking-wide text-paper"
+        >
           <Github size={18} />
-          <span className="slash-link relative z-0">View the code</span>
-        </span>
-        <span className="grid h-11 w-11 place-items-center rounded-full border-2 border-paper transition-all duration-300 group-hover:rotate-45 group-hover:border-blood group-hover:bg-blood">
-          <ArrowUpRight size={20} />
-        </span>
-      </a>
+          <span className="slash-link relative z-0">Code</span>
+        </a>
+        {project.liveUrl ? (
+          <a
+            href={project.liveUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            data-cursor="LIVE"
+            className="inline-flex items-center gap-1.5 border-2 border-paper px-3 py-1.5 font-display text-base uppercase tracking-wide text-paper transition-colors duration-300 hover:border-blood hover:bg-blood"
+          >
+            {project.liveLabel ?? 'Live'}
+            <ArrowUpRight size={18} />
+          </a>
+        ) : null}
+      </div>
     </article>
   );
 }
@@ -214,9 +225,9 @@ export default function ProjectsSection() {
       {/* Header strip (fixed inside the pinned frame) */}
       <div className="relative z-10 flex items-end justify-between px-5 pt-24 md:px-10 lg:absolute lg:inset-x-0 lg:top-0 lg:pt-24">
         <div>
-          <span className="tag-label">02 — Missions</span>
+          <span className="tag-label">02 / Work</span>
           <p className="mt-3 max-w-sm font-body text-sm text-paper/60">
-            Things I built that work in production, plus one movie recommender I'm still proud of.
+            Every one of these has a repo you can clone. The ones with a Live button have a demo running too.
           </p>
         </div>
         <div className="hidden items-center gap-4 lg:flex">
@@ -236,7 +247,7 @@ export default function ProjectsSection() {
         className="p-bigtitle pointer-events-none absolute bottom-[-4vh] left-0 hidden whitespace-nowrap font-display uppercase leading-none text-outline opacity-[0.12] lg:block"
         style={{ fontSize: '30vh' }}
       >
-        Selected missions · Selected missions
+        Built and shipped · Built and shipped
       </div>
 
       <div
@@ -246,12 +257,12 @@ export default function ProjectsSection() {
         {/* Intro panel */}
         <div className="flex shrink-0 flex-col justify-center lg:w-[38vw]">
           <h2 className="font-display uppercase leading-[0.85]" style={{ fontSize: 'clamp(3.5rem, 9vw, 9rem)' }}>
-            Selected
+            Stuff
             <br />
-            <span className="text-blood">Missions</span>
+            <span className="text-blood">I've built</span>
           </h2>
           <div className="mt-8 hidden items-center gap-3 font-comic text-2xl text-pow lg:flex">
-            Keep scrolling, the cards move sideways
+            Keep scrolling, the cards go sideways
             <span className="inline-block animate-[wiggle_1s_ease-in-out_infinite]">→</span>
           </div>
         </div>

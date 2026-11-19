@@ -8,8 +8,8 @@ gsap.registerPlugin(ScrollTrigger);
 const SEGMENTS = 20;
 
 const TOOLBOX = [
-  'Python', 'PyTorch', 'YOLOv8', 'OpenCV', 'LangChain', 'Gemini', 'Whisper', 'FAISS',
-  'pgvector', 'FastAPI', 'PostgreSQL', 'Supabase', 'Docker', 'AWS', 'React', 'Streamlit',
+  'YOLOv8', 'OpenCV', 'LightGBM', 'SHAP', 'Gemini', 'Whisper', 'FAISS', 'ChromaDB',
+  'pgvector', 'Supabase', 'Celery', 'Redis', 'MongoDB', 'Ruby on Rails', 'Sidekiq', 'Streamlit',
 ];
 
 const grouped = Object.entries(SKILL_CATEGORIES).map(([key, cat]) => ({
@@ -89,13 +89,13 @@ export default function SkillsSection() {
         {/* Left: sticky heading */}
         <div className="lg:col-span-5">
           <div className="lg:sticky lg:top-28">
-            <span className="tag-label !text-ink/70 before:!bg-ink">03 — Powers</span>
+            <span className="tag-label !text-ink/70 before:!bg-ink">03 / Skills</span>
             <h2 className="s-head mt-5 font-display uppercase leading-[0.85]" style={{ fontSize: 'clamp(3.5rem, 9vw, 8.5rem)' }}>
               <span className="block overflow-hidden"><span className="inline-block">Power</span></span>
               <span className="block overflow-hidden"><span className="inline-block text-paper">Levels.</span></span>
             </h2>
             <p className="mt-6 max-w-sm font-body text-lg text-ink/80">
-              Self-reported, lightly exaggerated, but backed by real projects. Hover a row to see it flex.
+              My own rough guess at each one. The projects above are the proof.
             </p>
 
             <div className="s-badge relative mt-12 hidden h-44 w-44 lg:block">
@@ -152,7 +152,7 @@ export default function SkillsSection() {
           ))}
 
           <div className="s-toolbox pt-4">
-            <div className="mb-5 font-comic text-3xl">Also in the utility belt:</div>
+            <div className="mb-5 font-comic text-3xl">Other tools I use:</div>
             <div className="flex flex-wrap gap-3">
               {TOOLBOX.map((t) => (
                 <span

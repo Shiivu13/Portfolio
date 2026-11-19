@@ -3,11 +3,11 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 const QUIPS: Record<string, string> = {
-  hero: 'Psst. The scroll wheel. Use it.',
-  about: 'Origin story time. Grab popcorn.',
+  hero: "Scroll down, there's more.",
+  about: 'Origin story. Short, I promise.',
   projects: 'The part recruiters actually read.',
-  skills: 'Power levels. Totally not inflated.',
-  contact: 'You made it. Respect. Now say hi.',
+  skills: 'Power levels. Mostly honest.',
+  contact: 'You made it to the bottom. Say hi?',
 };
 
 /** Health-bar scroll progress (bottom left) + a quip bubble that changes per section. */

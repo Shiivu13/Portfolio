@@ -4,9 +4,9 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { scrollToId } from '../lib/scroll';
 
 const links = [
-  { label: 'Origin', href: '#about' },
-  { label: 'Missions', href: '#projects' },
-  { label: 'Powers', href: '#skills' },
+  { label: 'About', href: '#about' },
+  { label: 'Work', href: '#projects' },
+  { label: 'Skills', href: '#skills' },
   { label: 'Contact', href: '#contact' },
 ];
 
@@ -144,7 +144,7 @@ export default function Navbar() {
             </a>
           </div>
         ))}
-        <p className="relative mt-8 font-comic text-2xl text-paper">Pick one. Choose wisely.</p>
+        <p className="relative mt-8 font-comic text-2xl text-paper">Where to?</p>
       </div>
     </>
   );

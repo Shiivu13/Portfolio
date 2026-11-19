@@ -5,13 +5,13 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 gsap.registerPlugin(ScrollTrigger);
 
 const PARAGRAPHS = [
-  "Hi, I'm Shivansh, a software engineer who loves bridging the gap between cutting-edge AI and everyday applications. It's not just about writing code; it's about building intelligent, production-ready systems that solve real problems.",
-  'It started with a simple curiosity about how machines see the world. Today that curiosity fuels YOLO-powered surveillance pipelines, GenAI assistants and FastAPI backends running on AWS.',
-  "I believe the best technology is powerful yet invisible. When I'm not tuning models or shrinking Docker images, I'm poking at the newest LLM frameworks and plotting the next build.",
+  "Hi, I'm Shivansh. I'm a software engineer, and most of what I build sits between an AI model and the people who end up using it. I care a lot about whether the thing runs outside my laptop. A model that only works in a notebook doesn't help anyone.",
+  'I got into this because I wanted to know how a computer could look at a photo and tell what was in it. That turned into YOLO surveillance pipelines, then GenAI assistants, then a lot of FastAPI services on AWS.',
+  "When I'm not training models or trimming Docker images, I'm usually trying some new LLM framework and half-planning the next project.",
 ];
 
 const STATS = [
-  { value: 7, suffix: '+', label: 'Projects shipped', color: 'bg-blood text-paper', rot: -6 },
+  { value: 10, suffix: '+', label: 'Projects built', color: 'bg-blood text-paper', rot: -6 },
   { value: 3, suffix: '', label: 'Years building', color: 'bg-pow text-ink', rot: 4 },
   { value: 100, suffix: '%', label: 'Caffeine powered', color: 'bg-ink text-paper', rot: -3 },
 ];
@@ -160,13 +160,13 @@ export default function AboutSection() {
             <div className="absolute inset-0 halftone-ink opacity-40 mix-blend-multiply" />
           </div>
           <div className="a-caption absolute -bottom-8 -left-3 z-20 max-w-[78%] border-[3px] border-ink bg-pow px-4 py-2 font-comic text-lg leading-tight shadow-[4px_4px_0_#0B0B0C] md:text-xl">
-            Fig. 1 — The suspect. Armed with Python and too many browser tabs.
+            Fig. 1: the suspect. Armed with Python and too many browser tabs.
           </div>
         </div>
 
         {/* Copy */}
         <div className="lg:col-span-7 lg:pl-10">
-          <span className="tag-label !text-ink/60">01 — Origin</span>
+          <span className="tag-label !text-ink/60">01 / About</span>
           <h2
             className="a-head mt-5 font-display uppercase leading-[0.9]"
             style={{ fontSize: 'clamp(3rem, 8vw, 7.5rem)' }}

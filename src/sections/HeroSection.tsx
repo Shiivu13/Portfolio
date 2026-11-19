@@ -112,13 +112,13 @@ export default function HeroSection({ ready }: { ready: boolean }) {
       <div className="h-fade absolute inset-x-0 top-24 z-10 flex justify-between px-5 md:top-28 md:px-10">
         <span className="h-meta tag-label">AI / ML · Backend · Cloud</span>
         <span className="h-meta hidden font-mono text-[11px] uppercase tracking-[0.25em] text-paper/50 md:block">
-          Based in India · Available 2026
+          India · Open to work
         </span>
       </div>
 
       {/* Name */}
       <div className="h-name absolute inset-0 z-10 flex flex-col items-center justify-center">
-        <h1 className="sr-only">Shivansh Tripathi — Software Engineer, AI / ML / Backend</h1>
+        <h1 className="sr-only">Shivansh Tripathi, software engineer working on AI, ML and backend systems</h1>
         <div
           aria-hidden="true"
           className="h-first select-none overflow-hidden font-display uppercase leading-[0.86] text-paper"
@@ -163,7 +163,7 @@ export default function HeroSection({ ready }: { ready: boolean }) {
               <path id="circ" d="M100,100 m-88,0 a88,88 0 1,1 176,0 a88,88 0 1,1 -176,0" />
             </defs>
             <text className="fill-paper font-mono text-[11px] uppercase tracking-[0.3em]">
-              <textPath href="#circ">· Code · Coffee · Chaos · Repeat · Ship it</textPath>
+              <textPath href="#circ">· Code · Coffee · Debug · Repeat · Ship it</textPath>
             </text>
           </svg>
         </div>
@@ -181,8 +181,8 @@ export default function HeroSection({ ready }: { ready: boolean }) {
       {/* Bottom row */}
       <div className="h-fade absolute inset-x-0 bottom-0 z-20 flex flex-col gap-6 px-5 pb-8 md:flex-row md:items-end md:justify-between md:px-10 md:pb-10">
         <p className="h-meta max-w-md font-body text-base text-paper/80 md:text-lg">
-          Software engineer building <span className="text-paper">real-time vision systems</span>,{' '}
-          <span className="text-paper">LLM orchestration</span> and production backends that don't fall over.
+          I'm a software engineer. Most of my work is <span className="text-paper">computer vision</span>,{' '}
+          <span className="text-paper">LLM apps</span> and the FastAPI backends that keep them running.
         </p>
         <div className="h-meta flex items-center gap-4">
           <Magnetic>
@@ -196,7 +196,7 @@ export default function HeroSection({ ready }: { ready: boolean }) {
               className="group relative inline-flex items-center gap-3 overflow-hidden border-[3px] border-paper bg-blood px-7 py-4 font-display text-lg uppercase tracking-wide text-paper shadow-[6px_6px_0_#F3EDE2] transition-[box-shadow,transform] duration-300 hover:translate-x-[3px] hover:translate-y-[3px] hover:shadow-[3px_3px_0_#F3EDE2]"
             >
               <span className="absolute inset-0 -translate-x-full bg-ink transition-transform duration-500 [transition-timing-function:cubic-bezier(.7,0,.2,1)] group-hover:translate-x-0" />
-              <span className="relative">See the missions</span>
+              <span className="relative">See my work</span>
               <ArrowDownRight className="relative transition-transform duration-500 group-hover:rotate-[-45deg]" size={22} />
             </a>
           </Magnetic>

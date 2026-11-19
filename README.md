@@ -1,4 +1,4 @@
-# Shivansh Tripathi — Portfolio
+# Shivansh Tripathi: portfolio
 
 Personal portfolio for Shivansh Tripathi, AI / ML and backend engineer.
 
