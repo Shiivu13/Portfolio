@@ -158,38 +158,29 @@
     clip-path: polygon(0 0, 100% 0, 100% 100%);
   }
 
-  /* ---------- katana cursor ---------- */
-  .katana-trail {
-    position: fixed;
-    inset: 0;
-    width: 100vw;
-    height: 100vh;
-    z-index: 199;
-    pointer-events: none;
-  }
-  .katana {
+  /* ---------- glitch cursor ---------- */
+  .glitch-cursor {
     position: fixed;
     left: 0;
     top: 0;
     z-index: 200;
+    width: 30px;
+    height: 38px;
     pointer-events: none;
     will-change: transform;
-    filter: drop-shadow(2px 3px 0 rgba(11, 11, 12, 0.55));
     transition: opacity 0.2s ease;
   }
-  .katana svg {
-    display: block;
-    overflow: visible;
-  }
-  .katana[data-hidden='true'] {
+  .glitch-cursor[data-hidden='true'] {
     visibility: hidden;
   }
-  .katana-glint {
-    transform: translate(-14px, -14px);
-    opacity: 0;
+  .glitch-layer {
+    position: absolute;
+    left: 0;
+    top: 0;
+    will-change: transform;
   }
-  .katana[data-ready='true'] .katana-glint {
-    animation: katana-glint 0.9s cubic-bezier(0.6, 0, 0.3, 1) infinite;
+  .glitch-screen {
+    mix-blend-mode: screen;
   }
 
   /* Nav-style text roll: two stacked copies slide up on hover */
@@ -274,13 +265,6 @@
   40% { transform: translate(2px, -1px); }
   60% { transform: translate(-1px, -1px); }
   80% { transform: translate(1px, 1px); }
-}
-
-@keyframes katana-glint {
-  0% { transform: translate(-14px, -14px); opacity: 0; }
-  15% { opacity: 1; }
-  70% { transform: translate(44px, 44px); opacity: 1; }
-  100% { transform: translate(44px, 44px); opacity: 0; }
 }
 
 @keyframes caret {
